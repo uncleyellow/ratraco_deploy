@@ -1,0 +1,111 @@
+/* home.component.scss */
+.landing-home {
+    .hero {
+      height: 100vh;
+      background-size: cover;
+      background-position: center;
+      .overlay {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .content-container {
+        z-index: 1;
+      }
+    }
+  
+    .about-us, .leadership, .services, .contact {
+      padding: 4rem 0;
+    }
+  
+    .leaders-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+    }
+  
+    .leader-card {
+      background: white;
+      border-radius: 0.5rem;
+      padding: 2rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+  
+    .leader-img {
+      width: 8rem;
+      height: 8rem;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+    }
+  
+    .btn-primary {
+      background-color: #fbbf24;
+      color: black;
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      text-transform: uppercase;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      &:hover {
+        background-color: #f59e0b;
+      }
+    }
+  }
+  /* landing-page.component.scss */
+:host {
+  display: block;
+}
+
+.landing-page {
+  @apply w-full min-h-screen;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  @apply w-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-blue-600 rounded-full;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animation classes */
+.fade-in {
+  @apply opacity-0 transform translate-y-4;
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover effects */
+.service-card {
+  @apply transition-all duration-300 ease-in-out;
+  
+  &:hover {
+    @apply transform -translate-y-2 shadow-xl;
+  }
+}
+
+.partner-logo {
+  @apply transition-all duration-300 ease-in-out;
+  
+  &:hover {
+    @apply transform scale-110;
+  }
+}

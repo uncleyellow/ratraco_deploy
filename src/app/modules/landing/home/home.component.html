@@ -1,0 +1,163 @@
+<app-header></app-header>
+
+
+<!-- home.component.html -->
+<!-- landing-page.component.html -->
+<div class="landing-page">
+  <!-- Hero Section -->
+  <section class="relative h-screen flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0">
+      <iframe 
+      class="w-full h-full object-cover"
+      src="https://www.youtube.com/embed/rSA8kNrGRZc?autoplay=1&mute=1&loop=1&playlist=rSA8kNrGRZc&controls=0&showinfo=0" 
+      frameborder="0" 
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+      <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+    </div>
+    <div class="relative text-center text-white px-4" @fadeIn>
+      <h1 class="text-5xl md:text-6xl font-bold mb-6">RATRACO</h1>
+      <p class="text-xl md:text-2xl mb-8">Đối tác logistics đáng tin cậy của bạn</p>
+      <button 
+        (click)="scrollToSection('services')"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full transform hover:scale-105 transition-transform duration-300">
+        Khám phá dịch vụ
+      </button>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-16 bg-gray-100">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <ng-container *ngFor="let stat of stats">
+          <div class="p-6 bg-white rounded-lg shadow-lg transform hover:-translate-y-1 transition-transform duration-300" @fadeIn>
+            <div class="text-4xl font-bold text-blue-600 mb-2">{{stat.value}}</div>
+            <div class="text-gray-600">{{stat.label}}</div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+<!-- Services Section in landing-page.component.html -->
+<section id="services" class="py-16 bg-gray-100">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-12" @fadeIn>Dịch vụ của chúng tôi</h2>
+    <div class="grid md:grid-cols-3 gap-8">
+      <ng-container *ngFor="let service of services">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-all duration-300" @fadeIn>
+          <!-- Image Container -->
+          <div class="relative h-64 overflow-hidden">
+            <img 
+              [src]="service.image" 
+              [alt]="service.title"
+              class="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500">
+          </div>
+          
+          <!-- Content Container -->
+          <div class="p-6">
+            <div class="flex items-center mb-4">
+              <mat-icon [svgIcon]="service.icon" class="text-blue-600 w-8 h-8 mr-3"></mat-icon>
+              <h3 class="text-xl font-semibold">{{service.title}}</h3>
+            </div>
+            <p class="text-gray-600">{{service.description}}</p>
+            
+            <!-- Call to Action Button -->
+            <button 
+              mat-flat-button 
+              color="primary"
+              class="mt-4 w-full py-2 rounded-full transform hover:scale-105 transition-transform duration-300">
+              Tìm hiểu thêm
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</section>
+
+  <!-- About Section -->
+  <section class="py-16 bg-blue-600 text-white">
+    <div class="container mx-auto px-4">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="order-2 md:order-1" @slideIn>
+          <h2 class="text-3xl font-bold mb-6">Về chúng tôi</h2>
+          <p class="text-lg mb-6">
+            Ratraco là doanh nghiệp hàng đầu trong lĩnh vực vận tải đường sắt và logistics tại Việt Nam. 
+            Với hơn 20 năm kinh nghiệm, chúng tôi tự hào mang đến những giải pháp vận tải tối ưu cho khách hàng.
+          </p>
+          <button 
+            class="bg-white text-blue-600 px-8 py-3 rounded-full hover:bg-gray-100 transform hover:scale-105 transition-transform duration-300">
+            Tìm hiểu thêm
+          </button>
+        </div>
+        <div class="order-1 md:order-2">
+          <img 
+            src="assets/images/about-image.jpg" 
+            alt="About Ratraco" 
+            class="rounded-lg shadow-xl w-full"
+            @fadeIn>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partners Section -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12" @fadeIn>Đối tác của chúng tôi</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <!-- Add partner logos here -->
+        <div class="p-4 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300"
+             *ngFor="let i of [1,2,3,4]">
+          <img [src]="'assets/images/partner-' + i + '.png'" [alt]="'Partner ' + i" class="max-h-16">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="py-16 bg-gray-100">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-8" @fadeIn>
+        <h2 class="text-3xl font-bold text-center mb-8">Liên hệ với chúng tôi</h2>
+        <form class="space-y-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Họ và tên</mat-label>
+              <input matInput placeholder="Nhập họ và tên">
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Email</mat-label>
+              <input matInput placeholder="Nhập email" type="email">
+            </mat-form-field>
+          </div>
+          
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Số điện thoại</mat-label>
+            <input matInput placeholder="Nhập số điện thoại">
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Nội dung</mat-label>
+            <textarea matInput rows="4" placeholder="Nhập nội dung"></textarea>
+          </mat-form-field>
+          
+          <div class="text-center">
+            <button 
+              mat-raised-button 
+              color="primary"
+              class="px-8 py-3 rounded-full transform hover:scale-105 transition-transform duration-300">
+              Gửi tin nhắn
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>
+  

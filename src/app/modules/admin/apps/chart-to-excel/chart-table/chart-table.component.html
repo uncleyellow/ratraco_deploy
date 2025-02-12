@@ -1,0 +1,238 @@
+<!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
+    <!-- Main -->
+        <!-- Bộ lọc -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6 sticky top-0 z-50 bg-white dark:bg-gray-900 p-4">
+            
+            <!-- Chọn bảng -->
+            <div class="flex flex-col">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Chọn bảng</label>
+                <!-- <mat-form-field class="w-full bg-white dark:bg-gray-800 rounded-md shadow-sm !m-0 !p-0">
+                    <mat-select [(value)]="selected" (valueChange)="getSheetData(selected)">
+                        <mat-option value="KQSXKD">Kết Quả sản xuất kinh doanh 12.2024</mat-option>
+                        <mat-option value="TTVTHHND">Trung tâm vận tải hàng hoá Nội Địa</mat-option>
+                        <mat-option value="TTVTHHQT">Trung tâm vận tải hàng hoá quốc tế</mat-option>
+                        <mat-option value="TLDTVT">Tỉ lệ doanh thu vận tải</mat-option>
+                        <mat-option value="TTVTHHQTM">Trung tâm vận tải hàng hoá Quốc tế mới</mat-option>
+                        <mat-option value="DTNHKS">Doanh thu Nhà Hàng - Khách Sạn</mat-option>
+                        <mat-option value="LNNHKS">Lợi nhuận Nhà Hàng - Khách Sạn</mat-option>
+                        <mat-option value="TTDTTH2024">Tỷ trọng doanh thu thực hiện 12.2024</mat-option>
+                        <mat-option value="DTRLGT2024">Doanh thu RLG tháng 12/2024</mat-option>
+                        <mat-option value="LNRLGT2024">Lợi nhuận RLG tháng 12/2024</mat-option>
+                        <mat-option value="TLDTCCLHVC">Tỷ lệ doanh thu của các loại hình vận chuyển</mat-option>
+                        <mat-option value="DTRSLT2024">Doanh thu RSL tháng 12/2024</mat-option>
+                        <mat-option value="LNRSLT122024">Lợi nhuận RSL tháng 12/2024</mat-option>
+                        <mat-option value="TLDTCLHVC2024">Tỷ lệ doanh thu các loại hình vận chuyển</mat-option>
+                        <mat-option value="DTRTDT122024">Doanh thu RTD tháng 12/2024</mat-option>
+                        <mat-option value="LNRTDT122024">Lợi nhuận RTD tháng 12/2024</mat-option>
+                        <mat-option value="TTDTCLDV">Tỷ trọng doanh thu các loại dịch vụ</mat-option>
+                        <mat-option value="DTRTV">Doanh thu RTV</mat-option>
+                        <mat-option value="LNRTV">Lợi nhuận RTV</mat-option>
+                        <mat-option value="TTDTTHT122024">Tỷ trọng doanh thu thực hiện tháng 12/2024</mat-option>
+
+
+                        <mat-option value="THDT">Tổng doanh thu</mat-option>
+                        <mat-option value="THCL">Tổng chêch lệnh</mat-option>
+                        <mat-option value="test">Test</mat-option>
+                        <mat-option value="TTDH">Chí phí điều hành</mat-option> 
+                        <mat-option value="TXep">Tấn xếp</mat-option>
+                        <mat-option value="DTkm">Đoàn tàu km</mat-option>   
+                        <mat-option value="TKMTT">Tấn km tổng trọng</mat-option> 
+                        <mat-option value="Don/do">Lượt dồn/dỡ</mat-option>     
+                        <mat-option value="DTND">Doanh Thu Nội địa</mat-option>      
+                        <mat-option value="DTQT">Doanh Thu Quốc tế</mat-option> 
+                        <mat-option value="XRN">Sản lượng Xuất Khẩu</mat-option>    
+                        <mat-option value="NRN">Sản lượng nhập khẩu</mat-option>    
+                        <mat-option value="tyleRN">Tỷ lệ rỗng nặng</mat-option> 
+                        <mat-option value="DTNHKS">Doanh thu NHKH Cây Xoài</mat-option>    
+                        <mat-option value="LNNHKS">Lợi nhuận NHKS Cây Xoài</mat-option>
+                        <mat-option value="DTRLG">Doanh thu RLG</mat-option>
+                        <mat-option value="LNRLG">Lợi nhuận RLG</mat-option>    
+                        <mat-option value="DTRSL">Doanh thu RSL</mat-option>
+                        <mat-option value="LNRSL">Lợi nhuận RSL</mat-option>    
+                        <mat-option value="DTRTV">Doanh thu RTV</mat-option>
+                        <mat-option value="LNRTV">Lợi nhuận RTV</mat-option>    
+                        <mat-option value="DTRTD">Doanh thu RTD</mat-option>
+                        <mat-option value="LNRTD">Lợi nhuận RTD</mat-option>    
+                        <mat-option value="DTGRL">Doanh thu Greenline</mat-option>
+                        <mat-option value="LNGRL">Lợi nhuận Greenline</mat-option>    
+                        <mat-option value="MB">Trung tâm vận tải miền Bắc</mat-option>    
+                        <mat-option value="MT">Trung tâm vận tải miền Trung</mat-option>                        
+                        
+                        <mat-option value="MN">Trung tâm vận tải miền Nam</mat-option>
+                        <mat-option value="SL2023">Sản lượng vận chuyển 2023</mat-option>   
+                        <mat-option value="SL2024">Sản lượng vận chuyển 2024</mat-option>      
+                        <mat-option value="SL2025">Sản lượng vận chuyển 2025</mat-option>      
+
+
+                    </mat-select>
+                </mat-form-field> -->
+
+
+                <mat-form-field class="w-full bg-white rounded-md shadow-sm">
+                    <input matInput type="text" placeholder="Chọn bảng dữ liệu"
+                           [formControl]="searchControl"
+                           [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete" 
+                                      [displayWith]="displayFn" 
+                                      (optionSelected)="onOptionSelected($event)">
+                      <mat-option *ngFor="let option of filteredOptions | async" 
+                                  [value]="option">
+                        {{ option.label }}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                  
+            </div>
+
+            <!-- Ô tìm kiếm -->
+            <!-- <div class="flex flex-col">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tìm kiếm</label>
+                <mat-form-field class="w-full bg-white dark:bg-gray-800 rounded-md shadow-sm !m-0 !p-0">
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Nhập để tìm kiếm..." #input />
+                </mat-form-field>
+            </div> -->
+  
+            <!-- Chọn loại biểu đồ -->
+            <div class="flex flex-col" *ngIf="selectedTable && selectedTable !== 'Tong_hop' && selectedTable !== 'KH_Chay_Tau_2025'">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Chọn biểu đồ</label>
+                <mat-form-field class="w-full bg-white dark:bg-gray-800 rounded-md shadow-sm !m-0 !p-0">
+                    <mat-select multiple [(value)]="chartType" (valueChange)="getMultipleChartData(chartType)">
+                        <mat-option value="MixedChart">MixedChart</mat-option>
+                        <mat-option value="Line">Line</mat-option>
+                        <mat-option value="Bar">Bar</mat-option>
+                        <mat-option value="Area">Area</mat-option>
+                        <mat-option value="Pie">Pie</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+  
+        </div>
+  
+        <!-- Bảng dữ liệu -->
+        <div class="fuse-card mb-6 bg-white dark:bg-gray-900 dark:text-gray-200" *ngIf="selectedTable && selectedTable !== 'Tong_hop' && selectedTable !== 'KH_Chay_Tau_2025'">
+            <div class="flex flex-col p-6 sm:p-8 rounded-2xl shadow-xl overflow-hidden">
+                <div class="text-lg font-medium mb-4">Dữ liệu bảng</div>
+                
+                <div class="overflow-x-auto overflow-y-auto max-h-96 fuse-scrollbar">
+                    <table mat-table [dataSource]="dataSource" matSort class="w-full min-w-[600px]">
+                        <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header 
+                                class="whitespace-nowrap px-4 py-2 bg-gray-100 dark:bg-gray-800 text-left"> 
+                                {{ column }} 
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 dark:border-gray-700"> 
+                                {{ formatNumber(element[column]) }}
+                                <!-- {{ element[column] }}  -->
+                            </td>
+                        </ng-container>
+
+  
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-gray-200 dark:bg-gray-700"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50 dark:hover:bg-gray-800"></tr>
+                        <tr class="mat-row text-center" *matNoDataRow>
+                            <td class="mat-cell px-4 py-2 text-gray-500 dark:text-gray-400" colspan="displayedColumns.length">
+                                Không có dữ liệu khớp với "{{ input.value }}"
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+  
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+            </div>
+        </div>
+  
+
+
+        <!-- Bảng dữ liệu th-->
+        <div class="fuse-card mb-6 bg-white dark:bg-gray-900 dark:text-gray-200" *ngIf="selectedTable === 'Tong_hop' || selectedTable === 'KH_Chay_Tau_2025'">
+            <div class="flex flex-col p-6 sm:p-8 rounded-2xl shadow-xl overflow-hidden">
+                <div class="text-lg font-medium mb-4">Dữ liệu bảng</div>
+                
+                <div class="overflow-x-auto overflow-y-auto max-h-96 fuse-scrollbar">
+                    <table mat-table [dataSource]="dataSource" matSort class="w-full min-w-[600px]">
+                        <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header 
+                                class="whitespace-nowrap px-4 py-2 bg-gray-100 dark:bg-gray-800 text-left"> 
+                                {{ column || '' }} 
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="px-4 py-2 border-b border-gray-200 dark:border-gray-700"> 
+                                {{ formatNumber(element[column]) }}
+                                <!-- {{ element[column] }}  -->
+                            </td>
+                        </ng-container>
+
+  
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-gray-200 dark:bg-gray-700"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50 dark:hover:bg-gray-800"></tr>
+                        <tr class="mat-row text-center" *matNoDataRow>
+                            <td class="mat-cell px-4 py-2 text-gray-500 dark:text-gray-400" colspan="displayedColumns.length">
+                                Không có dữ liệu khớp với "{{ input.value }}"
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+  
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+            </div>
+        </div>
+          
+          
+
+        <!-- Biểu đồ -->
+        <div class="grid gap-12 grid-cols-1">
+            
+            <!-- Biểu đồ Bar -->
+            <div *ngIf="chartType.includes('Bar')" class="fuse-card bg-white dark:bg-gray-900 dark:text-gray-200">
+                <div class="p-6 sm:p-8 rounded-2xl shadow-xl">
+                    <div class="text-lg font-medium mb-6">Biểu đồ tổng hợp</div>
+                    <app-mixed-chart #mixedChart [dataHeaderTable]="dataHeaderTable" [chartData]="data" class="w-full"></app-mixed-chart>
+                </div>
+            </div>
+  
+            <!-- Biểu đồ Pie -->
+            <div *ngIf="chartType.includes('Pie')" class="fuse-card bg-white dark:bg-gray-900 dark:text-gray-200">
+                <div class="p-6 sm:p-8 rounded-2xl shadow-xl">
+                    <div class="text-lg font-medium mb-6">Biểu đồ tròn</div>
+                    <app-pie-chart #pieChart [chartData]="data" class="w-full"></app-pie-chart>
+                </div>
+            </div>
+  
+            <!-- Biểu đồ Area -->
+            <div *ngIf="chartType.includes('Area')" class="fuse-card bg-white dark:bg-gray-900 dark:text-gray-200">
+                <div class="p-6 sm:p-8 rounded-2xl shadow-xl">
+                    <div class="text-lg font-medium mb-6">Biểu đồ polar</div>
+                    <app-polar-chart #polarChart [chartData]="data" class="w-full"></app-polar-chart>
+                </div>
+            </div>
+  
+            <!-- Biểu đồ Line -->
+            <div *ngIf="chartType.includes('Line')" class="fuse-card bg-white dark:bg-gray-900 dark:text-gray-200">
+                <div class="p-6 sm:p-8 rounded-2xl shadow-xl">
+                    <div class="text-lg font-medium mb-6">Biểu đồ đường</div>
+                    <app-line-chart #lineChart [chartData]="data" class="w-full"></app-line-chart>
+                </div>
+            </div>
+  
+            <!-- Biểu đồ Mix -->
+            <div *ngIf="chartType.includes('MixedChart')" class="fuse-card bg-white dark:bg-gray-900 dark:text-gray-200">
+                <div class="p-6 sm:p-8 rounded-2xl shadow-xl">
+                    <div class="text-lg font-medium mb-6">Biểu đồ tổng hợp</div>
+                    <app-line-bar-chart #mixedChart [chartData]="data" class="w-full"></app-line-bar-chart>
+                </div>
+            </div>
+  
+        </div>
+
+    
+  
+  
+
+        <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-md border border-gray-300 dark:border-gray-700" *ngIf="selectedTable && selectedTable !== 'Tong_hop' && selectedTable !== 'KH_Chay_Tau_2025'">
+            <div class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Nhận xét</div>
+            <p class="text-gray-700 dark:text-gray-300 text-base">
+                {{ commentData }}
+            </p>
+        </div>
+        
+          
+  

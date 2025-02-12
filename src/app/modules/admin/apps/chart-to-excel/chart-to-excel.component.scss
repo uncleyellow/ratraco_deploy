@@ -1,0 +1,40 @@
+@media (max-width: 599px) { /* Điện thoại */
+  .custom-dialog {
+    width: 90%; /* Rộng 90% cho màn hình điện thoại */
+    max-width: 100%; /* Không vượt quá 100% */
+  }
+}
+
+@media (min-width: 600px) and (max-width: 1024px) { /* iPad */
+  .custom-dialog {
+    width: 80%; /* Rộng 80% cho màn hình iPad */
+    max-width: 800px; /* Kích thước tối đa cho iPad */
+  }
+
+}
+
+@media (min-width: 1025px) { /* PC */
+  .custom-dialog {
+    width: 100%; /* Kích thước cố định cho PC */
+    max-width: 90%; /* Không vượt quá 90% chiều rộng màn hình */
+  }
+}
+
+
+.mat-mdc-form-field-subscript-wrapper {
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+
+.chart-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Tự động điều chỉnh */
+}
+.chart-container {
+  min-height: 450px; /* Giữ chiều cao ổn định */
+}
+
+
