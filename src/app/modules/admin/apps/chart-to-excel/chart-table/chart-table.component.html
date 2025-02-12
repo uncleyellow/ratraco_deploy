@@ -93,7 +93,7 @@
             </div> -->
   
             <!-- Chọn loại biểu đồ -->
-            <div class="flex flex-col" *ngIf="selectedTable && selectedTable !== 'Tong_hop' && selectedTable !== 'KH_Chay_Tau_2025'">
+            <div class="flex flex-col" *ngIf="selectedTable && selectedTable !== 'full' && selectedTable !== 'runPlan'">
                 <label class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Chọn biểu đồ</label>
                 <mat-form-field class="w-full bg-white dark:bg-gray-800 rounded-md shadow-sm !m-0 !p-0">
                     <mat-select multiple [(value)]="chartType" (valueChange)="getMultipleChartData(chartType)">
@@ -227,7 +227,7 @@
   
   
 
-        <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-md border border-gray-300 dark:border-gray-700" *ngIf="selectedTable && selectedTable !== 'Tong_hop' && selectedTable !== 'KH_Chay_Tau_2025'">
+        <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-md border border-gray-300 dark:border-gray-700" *ngIf="commentData">
             <div class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Nhận xét</div>
             <p class="text-gray-700 dark:text-gray-300 text-base">
                 {{ commentData }}
