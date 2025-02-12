@@ -44,7 +44,7 @@ export class ChartTableComponent implements OnInit{
 
     searchControl = new FormControl();
     options = [
-      { value: 'THDT', label: 'Tổng hợp doanh thu' },
+      { value: 'sheetcmt0', label: 'Tổng hợp doanh thu' },
       { value: 'THCL', label: 'Tổng chêch lệnh' },
       { value: 'test', label: 'Test' },
       { value: 'TTVTHHND', label: 'Tình Hình Vận Tải Hàng Nội Địa' },
@@ -150,89 +150,14 @@ export class ChartTableComponent implements OnInit{
           });
           return;
         }
-        
-        if (item === 'KQSXKD') {
-          this.dataHeaderTable = "KQSXKD"
-          serviceMethod = this.excelService.getSheet1Data();
-        } else if (item === 'TTVTHHND') {
-          this.dataHeaderTable = "TTVTHHND"
-          serviceMethod = this.excelService.getSheet2Data();
-        } else if (item === 'TTVTHHQT') {
-          this.dataHeaderTable = "TTVTHHQT"
-          serviceMethod = this.excelService.getSheet3Data();
+      
+        else if(item){
+          serviceMethod = this.excelService.getSheetData(item);
         }
-        else if (item === 'TLDTVT') {
-          this.dataHeaderTable = "TLDTVT"
-          serviceMethod = this.excelService.getSheet4Data();
-        }
-        else if (item === 'TTVTHHQTM') {
-          this.dataHeaderTable = "TTVTHHQTM"
-          serviceMethod = this.excelService.getSheet5Data();
-        }
-        else if (item === 'DTNHKS') {
-          this.dataHeaderTable = "DTNHKS"
-          serviceMethod = this.excelService.getSheet6Data();
-        }
-        else if (item === 'LNNHKS') {
-          this.dataHeaderTable = "LNNHKS"
-          serviceMethod = this.excelService.getSheet7Data();
-        }
-        else if (item === 'TTDTTH2024') {
-          this.dataHeaderTable = "TTDTTH2024"
-          serviceMethod = this.excelService.getSheet9Data();
-        }
-        else if (item === 'DTRLGT2024') {
-          this.dataHeaderTable = "DTRLGT2024"
-          serviceMethod = this.excelService.getSheet10Data();
-        }
-        else if (item === 'LNRLGT2024') {
-          this.dataHeaderTable = "LNRLGT2024"
-          serviceMethod = this.excelService.getSheet11Data();
-        }
-        else if (item === 'TLDTCCLHVC') {
-          this.dataHeaderTable = "TLDTCCLHVC"
-          serviceMethod = this.excelService.getSheet12Data();
-        }
-        else if (item === 'DTRSLT2024') {
-          this.dataHeaderTable = "DTRSLT2024"
-          serviceMethod = this.excelService.getSheet13Data();
-        }
-        else if (item === 'LNRSLT122024') {
-          this.dataHeaderTable = "LNRSLT122024"
-          serviceMethod = this.excelService.getSheet14Data();
-        }
-        else if (item === 'TLDTCLHVC2024') {
-          this.dataHeaderTable = "TLDTCLHVC2024"
-          serviceMethod = this.excelService.getSheet16Data();
-        }
-        else if (item === 'DTRTDT122024') {
-          this.dataHeaderTable = "DTRTDT122024"
-          serviceMethod = this.excelService.getSheet15Data();
-        }
-        else if (item === 'LNRTDT122024') {
-          this.dataHeaderTable = "LNRTDT122024"
-          serviceMethod = this.excelService.getSheet17Data();
-        }
-        else if (item === 'TTDTCLDV') {
-          this.dataHeaderTable = "TTDTCLDV"
-          serviceMethod = this.excelService.getSheet18Data();
-        }
-        else if (item === 'DTRTV') {
-          this.dataHeaderTable = "DTRTV"
-          serviceMethod = this.excelService.getSheet19Data();
-        }
-        else if (item === 'LNRTV') {
-          this.dataHeaderTable = "LNRTV"
-          serviceMethod = this.excelService.getSheet23Data();
-        }
-        else if (item === 'TTDTTHT122024') {
-          this.dataHeaderTable = "TTDTTHT122024"
-          serviceMethod = this.excelService.getSheet24Data();
-        }
-    
-        else if (item === 'THDT') {
+  
+        else if (item === 'sheetcmt0') {
           this.dataHeaderTable = "d"
-          this.excelService.getSheetcmt01data().subscribe((response: any) => {
+          this.excelService.getSheetData(item).subscribe((response: any) => {
             this.commentData = response.data; // Lấy mảng từ API response
             console.log(this.commentData);
           });
@@ -240,125 +165,7 @@ export class ChartTableComponent implements OnInit{
           serviceMethod = this.excelService.getSheet2b0Data();
         }
     
-        
-        else if (item === 'THCL') {
-          this.dataHeaderTable = "d"
-          serviceMethod = this.excelService.getSheet2b1Data();
-        }
-        else if (item === 'test') {
-          this.dataHeaderTable = "test"
-          serviceMethod = this.excelService.getTestData();
-        }
-        else if (item === 'TTDH') {
-          this.dataHeaderTable = "TTDH"
-          serviceMethod = this.excelService.getSheet2b2Data();
-        } 
-        else if (item === 'TXep') {
-          this.dataHeaderTable = "TXep"
-          serviceMethod = this.excelService.getSheet2b3Data();
-        }       
-        else if (item === 'DTkm') {
-          this.dataHeaderTable = "DTkm"
-          serviceMethod = this.excelService.getSheet2b4Data();
-        } 
-        else if (item === 'TKMTT') {
-          this.dataHeaderTable = "TKMTT"
-          serviceMethod = this.excelService.getSheet2b5Data();
-        } 
-        else if (item === 'Don/do') {
-          this.dataHeaderTable = "Don/do"
-          serviceMethod = this.excelService.getSheet2b6Data();
-        } 
-        else if (item === 'DTND') {
-          this.dataHeaderTable = "d"
-          serviceMethod = this.excelService.getSheet2b7Data();
-        }
-        else if (item === 'DTQT') {
-          this.dataHeaderTable = "d"
-          serviceMethod = this.excelService.getSheet2b8Data();
-        }
-        else if (item === 'XRN') {
-          this.dataHeaderTable = "XRN"
-          serviceMethod = this.excelService.getSheet2b9Data();
-        } 
-        else if (item === 'NRN') {
-          this.dataHeaderTable = "NRN"
-          serviceMethod = this.excelService.getSheet2b10Data();
-        }
-        else if (item === 'tyleRN') {
-          this.dataHeaderTable = "tyleRN"
-          serviceMethod = this.excelService.getSheet2b11Data();
-        }
-        else if (item === 'DTNHKS') {
-
-          serviceMethod = this.excelService.getSheet2b12Data();
-        }
-        else if (item === 'LNNHKS') {
-
-          serviceMethod = this.excelService.getSheet2b13Data();
-        }
-        else if (item === 'DTRLG') {
-          serviceMethod = this.excelService.getSheet2b14Data();
-        }
-        else if (item === 'LNRLG') {
-
-          serviceMethod = this.excelService.getSheet2b15Data();
-        }
-        else if (item === 'DTRSL') {
-
-          serviceMethod = this.excelService.getSheet2b16Data();
-        }
-        else if (item === 'LNRSL') {
-
-          serviceMethod = this.excelService.getSheet2b17Data();
-        } 
-        else if (item === 'DTRTV') {
-
-          serviceMethod = this.excelService.getSheet2b18Data();
-        }
-        else if (item === 'LNRTV') {
-
-          serviceMethod = this.excelService.getSheet2b19Data();
-        }
-        else if (item === 'DTRTD') {
-
-          serviceMethod = this.excelService.getSheet2b20Data();
-        }
-        else if (item === 'LNRTD') {
-
-          serviceMethod = this.excelService.getSheet2b21Data();
-        }
-        else if (item === 'DTGRL') {
-
-          serviceMethod = this.excelService.getSheet2b22Data();
-        }
-        else if (item === 'LNGRL') {
-
-          serviceMethod = this.excelService.getSheet2b23Data();
-        } 
-        else if (item === 'MB') {
-          this.dataHeaderTable = "MB"
-          serviceMethod = this.excelService.getSheet2b24Data();
-        }
-        else if (item === 'MT') {
-          this.dataHeaderTable = "MT"
-          serviceMethod = this.excelService.getSheet2b25Data();
-        } 
-        else if (item === 'MN') {
-          this.dataHeaderTable = "MN"
-          serviceMethod = this.excelService.getSheet2b26Data();
-        }
-        else if (item === 'SL2023') {
-          serviceMethod = this.excelService.getSheet2b27Data();
-        }
-        else if (item === 'SL2024') {
-        
-          serviceMethod = this.excelService.getSheet2b28Data();
-        }
-        else if (item === 'SL2025') {
-       
-          serviceMethod = this.excelService.getSheet2b29Data();
-        }
+ 
 
 
 
@@ -395,7 +202,7 @@ export class ChartTableComponent implements OnInit{
               });
               return rowObj;
             });
-      debugger
+     
             this.displayedColumns = blob.data[0].map((header: string, index: number) =>
               header || `Column${index + 1}`
             );
