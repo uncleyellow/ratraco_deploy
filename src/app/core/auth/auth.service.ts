@@ -73,7 +73,7 @@ export class AuthService
         {
             return throwError('User is already logged in.');
         }
-        debugger
+        
         return this._httpClient.post('api/auth/sign-in', credentials).pipe(
             switchMap((response: any) => {
 

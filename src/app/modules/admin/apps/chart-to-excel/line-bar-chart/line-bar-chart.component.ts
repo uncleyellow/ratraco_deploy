@@ -47,7 +47,7 @@ export class LineBarChartComponent implements OnChanges {
 //     }
 
 //     // Lấy giá trị min/max để căn chỉnh trục Y
-//     debugger
+//     
 //     const allValues = chartData.series.flatMap(s => s.data);
 // const maxY = Math.max(...allValues) * 1.2; // Tăng 20% để không sát mép trên
 // const minY = Math.min(...allValues) < 0 

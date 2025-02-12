@@ -35,13 +35,9 @@ export class ChartTableComponent implements OnInit{
     @ViewChild('lineChart') lineChart!: LineChartComponent;
     @ViewChild('pieChart') pieChart!: PieChartComponent;
     @ViewChild('lineBarChart') lineBarChart!: LineBarChartComponent;
-    // q:any="khánh";
     selected;
     drawerMode: 'over' | 'side' = 'side';
     drawerOpened: boolean = true;
-
-
-
     searchControl = new FormControl();
     options = [
       { value: 'sheetb0', label: 'Tổng doanh thu' },
@@ -120,7 +116,7 @@ export class ChartTableComponent implements OnInit{
       getSheetData(item: string) {
         let serviceMethod;
         this.dataHeaderTable = "d"
-        debugger
+        
         if(item === 'full'){
           serviceMethod = this.excelService.getSheetData(item);
           this.excelService.getSheetData(item).subscribe((response) => {
@@ -163,40 +159,22 @@ export class ChartTableComponent implements OnInit{
           serviceMethod = this.excelService.getSheetData(item);
           // serviceMethod = this.excelService.getSheet2b0Data();
         }
-    
- 
-
-
 
         if (serviceMethod) {
           serviceMethod.subscribe((blob) => {
             this.data = blob.data.slice(1).map((row: any[]) => {
-
-
-
-
-
-
-
-
-
-
-
-              
-
-              const rowObj: any = {};
+              const rowObj = {};
               blob.data[0].forEach((header: string, index: number) => {
                 const columnHeader = header.trim() !== "" ? header : `Column${index + 1}`;
-                
+    
                 let value = row[index];
-      
+
                 // Chuyển số thập phân sai thành số nguyên
                 if (typeof value === "string" && /^\d+\.\d{3}$/.test(value)) {
                   value = parseInt(value.replace('.', ''), 10); // Loại bỏ dấu "." nếu nó không phải số thập phân thực sự
                 } else if (!isNaN(value) && typeof value === "string") {
                   value = parseFloat(value.replace(',', '.')); // Chuyển dấu "," thành "." cho số thập phân thực
                 }
-      
                 rowObj[columnHeader] = value;
               });
               return rowObj;
