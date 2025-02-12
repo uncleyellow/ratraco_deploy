@@ -75,8 +75,8 @@ export class ChartTableComponent implements OnInit{
       { value: 'sheetb27', label: 'Sản lượng 2023' },
       { value: 'sheetb28', label: 'Sản lượng 2024' },
       { value: 'sheetb29', label: 'Sản lượng 2025' },
-      { value: 'Tong_hop', label: 'Tổng hợp' },
-      { value: 'KH_Chay_Tau_2025', label: 'Kế hoạch chạy tàu' }
+      { value: 'full', label: 'Tổng hợp' },
+      { value: 'runPlan', label: 'Kế hoạch chạy tàu' }
     ];
     
   filteredOptions!: Observable<{ value: string, label: string }[]>;
@@ -120,10 +120,10 @@ export class ChartTableComponent implements OnInit{
       getSheetData(item: string) {
         let serviceMethod;
         this.dataHeaderTable = "d"
-        if(item === 'Tong_hop'){
-          serviceMethod = this.excelService.getSheetSum();
-          this.excelService.getSheetSum().subscribe((response) => {
-            debugger
+        debugger
+        if(item === 'full'){
+          serviceMethod = this.excelService.getSheetData(item);
+          this.excelService.getSheetData(item).subscribe((response) => {
             this.displayedColumns = response.headers; // Cột tiêu đề
             this.dataSource = new MatTableDataSource(response.data);
             this.dataSource.paginator = this.paginator;
@@ -131,9 +131,9 @@ export class ChartTableComponent implements OnInit{
           });
           return
         }
-        if (item === 'KH_Chay_Tau_2025') {
-          serviceMethod = this.excelService.getSheetPlan2025();
-          this.excelService.getSheetPlan2025().subscribe((response) => {
+        if (item === 'runPlan') {
+          serviceMethod = this.excelService.getSheetData(item);
+          this.excelService.getSheetData(item).subscribe((response) => {
         
             // Kiểm tra response.headers có hợp lệ không
             if (!response.headers || response.headers.length === 0) {
