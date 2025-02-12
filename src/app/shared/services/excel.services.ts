@@ -1,14 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable , interval, switchMap } from 'rxjs';
-
+import { environment } from '../environment';
 @Injectable({
   providedIn: 'root',
 })
 export class GoogleSheetsService {
-  private apiUrl = 'http://localhost:3000/sheet1'; // URL của API server
+  private apiUrl = `${environment.api.url}`; // URL từ environment
  
   constructor(private http: HttpClient) {}
+
+  getSheetData(id): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
+
 
   getSheet1Data(): Observable<unknown> {
     return this.http.get<unknown>(this.apiUrl);
