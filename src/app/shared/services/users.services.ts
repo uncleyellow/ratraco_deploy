@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment} from '../environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'https://localhost:44347/api/Users';
+  private apiUrl = `${environment.api.url}/download`; // URL từ environment
 
   constructor(private http: HttpClient) {}
 
@@ -16,5 +17,9 @@ export class UserService {
     });
 
     return this.http.get<unknown[]>(this.apiUrl, { headers });
+  }
+
+  downloadAudio(videoUrl: string) {
+    window.open(`${this.apiUrl}?url=${encodeURIComponent(videoUrl)}`, "_blank");
   }
 }
