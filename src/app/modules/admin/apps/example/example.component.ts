@@ -1,6 +1,6 @@
 /* eslint-disable @angular-eslint/component-selector */
+import { HttpClient } from '@angular/common/http';
 import { Component, ViewEncapsulation } from '@angular/core';
-import { UserService } from 'app/shared/services/users.services';
 
 @Component({
     selector     : 'example',
@@ -9,22 +9,34 @@ import { UserService } from 'app/shared/services/users.services';
 })
 export class ExampleComponent
 { 
-    videoUrl = "";
+  trackUrl: string = '';
+  downloadLink: string | null = null;
 
     /**
      * Constructor
      */
     constructor(
-        private userServices : UserService
+      private http: HttpClient
     )
     {
 
     }
-    download() {
-        if (this.videoUrl.trim()) {
-          this.userServices.downloadAudio(this.videoUrl);
+    fetchDownloadLink() {
+      if (!this.trackUrl) {
+        alert('Vui lòng nhập link SoundCloud!');
+        return;
+      }
+  
+      const apiUrl = `https://soundcloudmp3.org/download?url=${this.trackUrl}`;
+      
+      this.http.get(apiUrl).subscribe((response: any) => {
+        if (response && response.download_url) {
+          this.downloadLink = response.download_url;
         } else {
-          alert("Nhập URL YouTube hợp lệ!");
+          alert('Không tìm thấy link tải!');
         }
+      });
     }
+    
+    
 }

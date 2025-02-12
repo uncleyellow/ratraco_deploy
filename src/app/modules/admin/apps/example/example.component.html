@@ -5,11 +5,13 @@
 
         <!-- CONTENT GOES HERE -->
         <div class="h-400 min-h-400 max-h-400 border-2 border-dashed border-gray-300 rounded-2xl">
-            <div class="container">
-                <h2>Tải nhạc từ YouTube</h2>
-                <input [(ngModel)]="videoUrl" placeholder="Nhập URL YouTube" />
-                <button (click)="download()">Tải xuống</button>
+            <div>
+                <input type="text" [(ngModel)]="trackUrl" placeholder="Nhập link SoundCloud" />
+                <button (click)="fetchDownloadLink()">Lấy Link MP4</button>
+                <a *ngIf="downloadLink" [href]="downloadLink" download>Download MP4</a>
               </div>
+              
+                         
         </div>
 
           
