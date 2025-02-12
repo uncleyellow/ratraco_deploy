@@ -44,8 +44,8 @@ export class ChartTableComponent implements OnInit{
 
     searchControl = new FormControl();
     options = [
-      { value: 'sheetcmt0', label: 'Tổng doanh thu' },
-      { value: 'sheetb0', label: 'Tổng chêch lệnh' },
+      { value: 'sheetb0', label: 'Tổng doanh thu' },
+      { value: 'sheetb1', label: 'Tổng chêch lệnh' },
       // { value: 'test', label: 'Test' },
       { value: 'sheetb2', label: 'chi phí điều hành' },
       { value: 'sheetb3', label: 'Tấn Xếp hàng hóa' },
