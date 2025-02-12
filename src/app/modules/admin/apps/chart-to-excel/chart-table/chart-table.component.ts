@@ -75,8 +75,8 @@ export class ChartTableComponent implements OnInit{
       { value: 'sheetb27', label: 'Sản lượng 2023' },
       { value: 'sheetb28', label: 'Sản lượng 2024' },
       { value: 'sheetb29', label: 'Sản lượng 2025' },
-      { value: 'Tong_hop', label: 'Tổng hợp' },
-      { value: 'KH_Chay_Tau_2025', label: 'Kế hoạch chạy tàu' }
+      { value: 'full', label: 'Tổng hợp' },
+      { value: 'runPlan', label: 'Kế hoạch chạy tàu' }
     ];
     
   filteredOptions!: Observable<{ value: string, label: string }[]>;
