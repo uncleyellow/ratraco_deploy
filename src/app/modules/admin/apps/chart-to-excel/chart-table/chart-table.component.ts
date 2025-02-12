@@ -153,14 +153,15 @@ export class ChartTableComponent implements OnInit{
           serviceMethod = this.excelService.getSheetData(item);
         }
   
-        else if (item === 'sheetcmt0') {
+        else if (item === 'sheetb0') {
           this.dataHeaderTable = "d"
-          this.excelService.getSheetData(item).subscribe((response: any) => {
+          this.excelService.getSheetData('sheetcmt0').subscribe((response: any) => {
             this.commentData = response.data; // Lấy mảng từ API response
             console.log(this.commentData);
           });
           console.log(this.commentData)
-          serviceMethod = this.excelService.getSheet2b0Data();
+          serviceMethod = this.excelService.getSheetData(item);
+          // serviceMethod = this.excelService.getSheet2b0Data();
         }
     
  
