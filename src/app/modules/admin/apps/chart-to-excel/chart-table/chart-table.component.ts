@@ -89,6 +89,10 @@ export class ChartTableComponent implements OnInit{
         map(value => (typeof value === 'string' ? this._filter(value) : this.options))
       );
         this.getSheetData(this.selected);
+        // Quét lại dữ liệu sau mỗi 10 giây
+    setInterval(() => {
+      this.getSheetData(this.selectedTable);
+    }, 10000);
       }
       private _filter(value: string): { value: string, label: string }[] {
         const filterValue = value.toLowerCase();

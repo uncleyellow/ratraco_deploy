@@ -1,18 +1,36 @@
-<div class="flex flex-col flex-auto min-w-0">
+<div class="flex flex-col items-center p-6 bg-white rounded-lg shadow-lg max-w-lg mx-auto">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Tải Nhạc Online 🎵</h2>
 
-    <!-- Main -->
-    <div class="flex-auto p-6 sm:p-10">
+    <!-- Input tải nhạc SoundCloud -->
+    <mat-form-field class="w-full">
+        <mat-label>Nhập link SoundCloud dùng cái này </mat-label>
+        <input matInput [(ngModel)]="soundcloudUrl" placeholder="https://soundcloud.com/your-track">
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="w-full mt-2"
+            (click)="fetchDownloadSoundCloud()"
+            [disabled]="isLoading">
+        <mat-progress-spinner *ngIf="isLoading" diameter="20" mode="indeterminate"></mat-progress-spinner>
+        <span *ngIf="!isLoading">Tải Nhạc SoundCloud</span>
+    </button>
 
-        <!-- CONTENT GOES HERE -->
-        <div class="h-400 min-h-400 max-h-400 border-2 border-dashed border-gray-300 rounded-2xl">
-            <div class="container">
-                <h2>Tải nhạc từ YouTube</h2>
-                <input [(ngModel)]="videoUrl" placeholder="Nhập URL YouTube" />
-                <button (click)="download()">Tải xuống</button>
-              </div>
-        </div>
+    <!-- Input tải nhạc YouTube -->
+    <mat-form-field class="w-full mt-4">
+        <mat-label>Nhập link YouTube (Chưa dùng được)</mat-label>
+        <input matInput [(ngModel)]="youtubeUrl" placeholder="https://www.youtube.com/watch?v=...">
+    </mat-form-field>
+    <button mat-raised-button color="warn" class="w-full mt-2"
+            (click)="fetchDownloadYouTube()"
+            [disabled]="isLoading">
+        <mat-progress-spinner *ngIf="isLoading" diameter="20" mode="indeterminate"></mat-progress-spinner>
+        <span *ngIf="!isLoading">Tải Nhạc YouTube</span>
+    </button>
 
-          
-    </div>
+    <!-- Hiển thị lỗi -->
+    <p *ngIf="errorMessage" class="mt-2 text-red-500 text-sm">
+        {{ errorMessage }}
+    </p>
 
+    <!-- Link tải file -->
+    <a *ngIf="downloadLink" [href]="downloadLink" download="music.mp3"
+       class="mt-4 text-blue-500 underline">Tải file MP3</a>
 </div>
