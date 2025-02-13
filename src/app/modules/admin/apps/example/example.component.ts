@@ -25,7 +25,7 @@ export class ExampleComponent {
     this.errorMessage = null;
     this.downloadLink = null;
 
-    const apiUrl = `https://ratracobeexcel-production.up.railway.app/download/soundcloud?url=${encodeURIComponent(this.soundcloudUrl)}`;
+    const apiUrl = `https://ratracobeexcel-production.up.railway.app/download/soundcloud?url=${this.soundcloudUrl}`;
 
     this.http.get(apiUrl, { responseType: 'blob' }).subscribe({
       next: (blob) => {
