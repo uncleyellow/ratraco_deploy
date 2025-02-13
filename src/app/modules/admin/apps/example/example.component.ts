@@ -3,40 +3,49 @@ import { HttpClient } from '@angular/common/http';
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
-    selector     : 'example',
-    templateUrl  : './example.component.html',
-    encapsulation: ViewEncapsulation.None
+  selector: 'example',
+  templateUrl: './example.component.html',
+  encapsulation: ViewEncapsulation.None
 })
-export class ExampleComponent
-{ 
-  trackUrl: string = '';
+export class ExampleComponent {
+  soundcloudUrl: string = '';
+  isLoading: boolean = false;
+  errorMessage: string | null = null;
   downloadLink: string | null = null;
 
-    /**
-     * Constructor
-     */
-    constructor(
-      private http: HttpClient
-    )
-    {
+  constructor(private http: HttpClient) {}
 
+  fetchDownloadLink() {
+    if (!this.soundcloudUrl.trim()) {
+      this.errorMessage = 'Vui lòng nhập link SoundCloud!';
+      return;
     }
-    fetchDownloadLink() {
-      if (!this.trackUrl) {
-        alert('Vui lòng nhập link SoundCloud!');
-        return;
+
+    this.isLoading = true;
+    this.errorMessage = null;
+    this.downloadLink = null;
+
+    const apiUrl = `https://ratracobeexcel-production.up.railway.app/download/soundcloud?url=${encodeURIComponent(this.soundcloudUrl)}`;
+
+    this.http.get(apiUrl, { responseType: 'blob' }).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        this.downloadLink = url;
+
+        // Tạo thẻ a để tải file
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'soundcloud.mp3';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        this.errorMessage = 'Lỗi tải nhạc! Vui lòng thử lại.';
+      },
+      complete: () => {
+        this.isLoading = false;
       }
-  
-      const apiUrl = `https://soundcloudmp3.org/download?url=${this.trackUrl}`;
-      
-      this.http.get(apiUrl).subscribe((response: any) => {
-        if (response && response.download_url) {
-          this.downloadLink = response.download_url;
-        } else {
-          alert('Không tìm thấy link tải!');
-        }
-      });
-    }
-    
-    
+    });
+  }
 }
