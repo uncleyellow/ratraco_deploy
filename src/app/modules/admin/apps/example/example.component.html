@@ -1,26 +1,36 @@
-<div class="flex flex-col items-center p-6 bg-gray-100 rounded-lg shadow-md max-w-md mx-auto">
-    <h2 class="text-xl font-semibold text-gray-800">Tải Nhạc SoundCloud</h2>
-  
-    <input
-      type="text"
-      [(ngModel)]="soundcloudUrl"
-      placeholder="Nhập link SoundCloud..."
-      class="w-full p-2 mt-4 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-indigo-400"
-    />
-  
-    <button
-      (click)="fetchDownloadLink()"
-      [disabled]="isLoading"
-      class="w-full mt-4 bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition"
-    >
-      {{ isLoading ? 'Đang tải...' : 'Tải Nhạc' }}
+<div class="flex flex-col items-center p-6 bg-white rounded-lg shadow-lg max-w-lg mx-auto">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Tải Nhạc Online 🎵</h2>
+
+    <!-- Input tải nhạc SoundCloud -->
+    <mat-form-field class="w-full">
+        <mat-label>Nhập link SoundCloud dùng cái này </mat-label>
+        <input matInput [(ngModel)]="soundcloudUrl" placeholder="https://soundcloud.com/your-track">
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="w-full mt-2"
+            (click)="fetchDownloadSoundCloud()"
+            [disabled]="isLoading">
+        <mat-progress-spinner *ngIf="isLoading" diameter="20" mode="indeterminate"></mat-progress-spinner>
+        <span *ngIf="!isLoading">Tải Nhạc SoundCloud</span>
     </button>
-  
+
+    <!-- Input tải nhạc YouTube -->
+    <mat-form-field class="w-full mt-4">
+        <mat-label>Nhập link YouTube (Chưa dùng được)</mat-label>
+        <input matInput [(ngModel)]="youtubeUrl" placeholder="https://www.youtube.com/watch?v=...">
+    </mat-form-field>
+    <button mat-raised-button color="warn" class="w-full mt-2"
+            (click)="fetchDownloadYouTube()"
+            [disabled]="isLoading">
+        <mat-progress-spinner *ngIf="isLoading" diameter="20" mode="indeterminate"></mat-progress-spinner>
+        <span *ngIf="!isLoading">Tải Nhạc YouTube</span>
+    </button>
+
+    <!-- Hiển thị lỗi -->
     <p *ngIf="errorMessage" class="mt-2 text-red-500 text-sm">
-      {{ errorMessage }}
+        {{ errorMessage }}
     </p>
-  
-    <a *ngIf="downloadLink" [href]="downloadLink" download="soundcloud.mp3"
+
+    <!-- Link tải file -->
+    <a *ngIf="downloadLink" [href]="downloadLink" download="music.mp3"
        class="mt-4 text-blue-500 underline">Tải file MP3</a>
-  </div>
-  
+</div>
