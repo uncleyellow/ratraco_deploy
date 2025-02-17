@@ -55,6 +55,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 icon : 'heroicons_outline:chart-pie',
                 link : '/apps/profile'
             },
+            {
+                id   : 'users',
+                title: 'Users',
+                type : 'basic',
+                icon : 'heroicons_outline:chart-pie',
+                link : '/apps/users'
+            },
         ]
     },
 ];
@@ -111,6 +118,13 @@ export const compactNavigation: FuseNavigationItem[] = [
                 type : 'basic',
                 icon : 'heroicons_outline:chart-pie',
                 link : '/apps/profile'
+            },
+            {
+                id   : 'users',
+                title: 'Users',
+                type : 'basic',
+                icon : 'heroicons_outline:chart-pie',
+                link : '/apps/users'
             },
         ]
     },
@@ -169,6 +183,13 @@ export const futuristicNavigation: FuseNavigationItem[] = [
                 icon : 'heroicons_outline:chart-pie',
                 link : '/apps/profile'
             },
+            {
+                id   : 'users',
+                title: 'Users',
+                type : 'basic',
+                icon : 'heroicons_outline:chart-pie',
+                link : '/apps/users'
+            },
         ]
     },
 ];
@@ -225,6 +246,13 @@ export const horizontalNavigation: FuseNavigationItem[] = [
                 type : 'basic',
                 icon : 'heroicons_outline:chart-pie',
                 link : '/apps/profile'
+            },
+            {
+                id   : 'users',
+                title: 'Users',
+                type : 'basic',
+                icon : 'heroicons_outline:chart-pie',
+                link : '/apps/users'
             },
         ]
     },
