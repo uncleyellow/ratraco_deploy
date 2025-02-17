@@ -10,10 +10,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 import { UsersComponent } from './users.component';
 import { usersRoutes } from './users.routing';
+import { DialogAddUsers } from './dialog-add-users/dialog-add-users.component';
 
 @NgModule({
     declarations: [
-        UsersComponent
+        UsersComponent,
+        DialogAddUsers
     ],
     imports     : [
         RouterModule.forChild(usersRoutes),

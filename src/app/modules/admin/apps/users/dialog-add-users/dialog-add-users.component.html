@@ -1,0 +1,42 @@
+<div class="p-6">
+    <h2 mat-dialog-title>Thêm người dùng mới</h2>
+    
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="flex flex-col gap-4">
+        <mat-form-field class="w-full">
+          <mat-label>Tên người dùng</mat-label>
+          <input matInput formControlName="userName" required>
+          <mat-error *ngIf="userForm.get('userName')?.hasError('required')">
+            Vui lòng nhập tên người dùng
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Mật khẩu</mat-label>
+          <input matInput type="password" formControlName="password" required>
+          <mat-error *ngIf="userForm.get('password')?.hasError('required')">
+            Vui lòng nhập mật khẩu
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Địa chỉ</mat-label>
+          <input matInput formControlName="address">
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Số điện thoại</mat-label>
+          <input matInput formControlName="phoneNumber">
+          <mat-error *ngIf="userForm.get('phoneNumber')?.hasError('pattern')">
+            Số điện thoại không hợp lệ
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="flex justify-end gap-4 mt-6">
+        <button mat-button type="button" (click)="onCancel()">Hủy</button>
+        <button mat-raised-button color="primary" type="submit" 
+                [disabled]="userForm.invalid">Lưu</button>
+      </div>
+    </form>
+  </div>

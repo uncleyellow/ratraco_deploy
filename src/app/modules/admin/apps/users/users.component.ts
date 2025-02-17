@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { UsersRatracoService } from "app/shared/services/usersRatraco.services";
+import { DialogAddUsers } from "./dialog-add-users/dialog-add-users.component";
 
 @Component({
     selector: 'app-users',
@@ -9,7 +11,8 @@ import { UsersRatracoService } from "app/shared/services/usersRatraco.services";
   export class UsersComponent implements OnInit{
     data
     constructor(
-      private usersServices: UsersRatracoService
+      private usersServices: UsersRatracoService,
+      private dialog: MatDialog
     ){
 
     }
@@ -19,7 +22,18 @@ import { UsersRatracoService } from "app/shared/services/usersRatraco.services";
     }
 
     addNewUsers(){
-
+      const dialogRef = this.dialog.open(DialogAddUsers, {
+        width: '500px',
+        disableClose: true
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        debugger
+        if (result) {
+          console.log('User data:', result);
+          // Xử lý dữ liệu người dùng ở đây
+        }
+      });
     }
 
     getUsers(){
