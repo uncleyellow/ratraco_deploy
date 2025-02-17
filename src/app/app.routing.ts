@@ -82,6 +82,7 @@ export const appRoutes: Route[] = [
                 {path: 'chart-to-excel', loadChildren: () => import('app/modules/admin/apps/chart-to-excel/chart-to-excel.module').then(m => m.ChartToExcelModule)},
                 {path: 'example', loadChildren: () => import('app/modules/admin/apps/example/example.module').then(m => m.ExampleModule)},
                 {path: 'home', loadChildren: () => import('app/modules/landing/home/home.module').then(m => m.LandingHomeModule)},
+                {path: 'users', loadChildren: () => import('app/modules/admin/apps/users/users.module').then(m => m.UsersModule)},
             ]},
         ]
     }
