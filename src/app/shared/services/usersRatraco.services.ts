@@ -13,4 +13,16 @@ export class UsersRatracoService {
   getSheetData(id): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
+
+  addUser(userData: any): Observable<any> {
+    debugger
+    return this.http.post(`${this.apiUrl}/api/users`, {
+      userName: userData.userName,
+      passWord: userData.password,
+      address: userData.address,
+      phoneNumbers: userData.phoneNumber,
+      role: userData.role,
+      creatBy: 'admin' // Có thể thay đổi tùy theo logic của bạn
+    });
+  }
 }
