@@ -20,7 +20,7 @@ export class MeetingRoomComponent implements OnInit {
   
     ngOnInit(): void {
       const uniqueId = uuidv4();
-      debugger
+      
       // Lấy quyền truy cập vào camera/microphone
       navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
         this.localStream = stream;

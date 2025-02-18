@@ -1,7 +1,7 @@
 <div class="meeting-room">
   <div class="video-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <div *ngFor="let participant of participants" class="video-container relative">
-      <video #localVideo [attr.srcObject]="participant.stream" autoplay playsinline class="w-full h-full object-cover rounded-md"></video>
+      <video #localVideo [srcObject]="participant.stream" autoplay playsinline class="w-full h-full object-cover rounded-md"></video>
       <div class="absolute bottom-2 left-2 bg-black bg-opacity-50 px-2 py-1 text-sm text-white rounded">
         {{ participant.name }}
       </div>
