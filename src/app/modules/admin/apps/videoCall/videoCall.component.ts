@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { VideoCallService } from 'app/shared/services/video-call.services';
 import { v4 as uuidv4 } from 'uuid';
+import { io } from 'socket.io-client';
+import { environment} from '../../../../shared/environment';
 
 @Component({
   selector: 'app-meeting-room',
@@ -15,8 +17,12 @@ export class MeetingRoomComponent implements OnInit {
     isRecording: boolean = false;
     localStream: MediaStream | null = null;
     peerConnections: any = {};
+    socket: any;
+
     @ViewChildren('localVideo') localVideos!: QueryList<ElementRef>;
-    constructor(private videoCallService: VideoCallService) {}
+    constructor(private videoCallService: VideoCallService) {
+      this.socket = io(`${environment.api.url}`);// Kết nối đến server
+    }
   
     // ngOnInit(): void {
     //   // Khởi tạo kết nối WebRTC và lấy stream của camera/microphone
@@ -61,6 +67,9 @@ export class MeetingRoomComponent implements OnInit {
       }).catch((error) => {
         console.error('Không thể truy cập camera/microphone: ', error);
       });
+      this.socket.on('newParticipant', (data: any) => {
+        this.handleNewParticipant(data.stream, data.name);
+      });
     }
     
     createVideoElement(participant) {
@@ -97,6 +106,7 @@ export class MeetingRoomComponent implements OnInit {
           });
         }
       });
+      this.startCamera(); // Gọi startCamera sau khi view đã được khởi tạo
     }
     
 
@@ -151,24 +161,42 @@ export class MeetingRoomComponent implements OnInit {
       try {
         // Lấy quyền truy cập camera
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    
-        // Kiểm tra nếu có các video element và gán stream vào từng video
-        if (this.localVideos && this.localVideos.length > 0) {
-          this.localVideos.toArray().forEach(videoElement => {
-            const video: HTMLVideoElement = videoElement.nativeElement;
-            video.srcObject = stream;
-            video.play();
-          });
-        } else {
-          console.error("Không tìm thấy thẻ video để hiển thị camera!");
-        }
-    
+        
+        // Gán stream của local video vào participant
+        this.localStream = stream;
+  
+        // Thêm người tham gia đầu tiên là local participant
+        const localParticipant = { id: 'localUser', name: 'You', stream, isLocal: true };
+        this.participants.push(localParticipant);
+  
+        // Thông báo cho server khi người dùng tham gia
+        this.socket.emit('joinRoom', 'You'); // Gửi tên người tham gia cho server
+  
         console.log("Camera đã bật thành công!");
       } catch (error) {
         console.error("Lỗi khi bật camera:", error);
       }
     }
+  
     
+     // Giả sử có một hàm để xử lý người tham gia mới vào (remote user)
+  handleNewParticipant(participantStream: MediaStream, participantName: string) {
+    // Tạo đối tượng participant cho người tham gia mới
+    const remoteParticipant = { id: participantName, name: participantName, stream: participantStream, isLocal: false };
+    
+    // Thêm người tham gia mới vào danh sách
+    this.participants.push(remoteParticipant);
+  }
+
+  // Giả lập việc một người tham gia mới vào
+  simulateNewParticipant() {
+    // Giả sử có một stream từ người tham gia khác (remote)
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then(stream => {
+        this.handleNewParticipant(stream, 'Participant 2');
+      })
+      .catch(err => console.error("Lỗi khi nhận stream của người tham gia mới:", err));
+  }
 
     
 }
