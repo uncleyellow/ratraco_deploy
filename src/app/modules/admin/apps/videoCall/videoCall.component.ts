@@ -70,6 +70,7 @@ export class MeetingRoomComponent implements OnInit {
       this.socket.on('newParticipant', (data: any) => {
         this.handleNewParticipant(data.stream, data.name);
       });
+      this.startCamera()
     }
     
     createVideoElement(participant) {
