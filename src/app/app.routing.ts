@@ -83,6 +83,8 @@ export const appRoutes: Route[] = [
                 {path: 'example', loadChildren: () => import('app/modules/admin/apps/example/example.module').then(m => m.ExampleModule)},
                 {path: 'home', loadChildren: () => import('app/modules/landing/home/home.module').then(m => m.LandingHomeModule)},
                 {path: 'users', loadChildren: () => import('app/modules/admin/apps/users/users.module').then(m => m.UsersModule)},
+                {path: 'video-call', loadChildren: () => import('app/modules/admin/apps/videoCall/videoCall.module').then(m => m.VideoCallModule)},
+
             ]},
         ]
     }
