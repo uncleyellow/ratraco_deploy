@@ -30,8 +30,8 @@ export class MeetingRoomComponent implements OnInit {
   
       // Tham gia phòng
       const roomId = 'meetingRoom1'; // ID phòng
-      const participant = { id: 'user1', name: 'User 1' }; // Thông tin người tham gia
-      this.videoCallService.joinRoom(roomId, participant);
+
+      this.videoCallService.joinRoom(roomId, this.participants);
     }
 
     ngAfterViewInit(): void {

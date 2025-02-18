@@ -8,7 +8,8 @@ import { environment} from '../environment';
 })
 export class VideoCallService {
   private socket: any;
-  private participantsSubject: BehaviorSubject<any[]> = new BehaviorSubject([]);
+  // Khai báo participants$ là BehaviorSubject thay vì Observable
+  private participantsSubject = new BehaviorSubject<any[]>([]); // Đảm bảo bạn khởi tạo với mảng rỗng
   participants$ = this.participantsSubject.asObservable();
   
   constructor() {
@@ -23,7 +24,17 @@ export class VideoCallService {
 
   joinRoom(roomId: string, participant: any): void {
     this.socket.emit('joinRoom', roomId, participant);
+
+    // Lắng nghe stream của các participant từ server
+    this.socket.on('participantStream', (stream: MediaStream, participant: any) => {
+      // Cập nhật participant với stream của họ
+      participant.stream = stream;
+      
+      // Cập nhật danh sách participants
+      this.participantsSubject.next([...this.participantsSubject.getValue(), participant]);
+    });
   }
+  
 
   sendSignal(data: any): void {
     this.socket.emit('signal', data);
