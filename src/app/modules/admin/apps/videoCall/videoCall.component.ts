@@ -61,6 +61,7 @@ export class MeetingRoomComponent implements OnInit {
       }).catch((error) => {
         console.error('Không thể truy cập camera/microphone: ', error);
       });
+      this.startCamera()
     }
     
     createVideoElement(participant) {
@@ -97,6 +98,7 @@ export class MeetingRoomComponent implements OnInit {
           });
         }
       });
+      this.startCamera(); // Gọi startCamera sau khi view đã được khởi tạo
     }
     
 
@@ -151,23 +153,25 @@ export class MeetingRoomComponent implements OnInit {
       try {
         // Lấy quyền truy cập camera
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    
-        // Kiểm tra nếu có các video element và gán stream vào từng video
-        if (this.localVideos && this.localVideos.length > 0) {
-          this.localVideos.toArray().forEach(videoElement => {
-            const video: HTMLVideoElement = videoElement.nativeElement;
-            video.srcObject = stream;
-            video.play();
-          });
+  
+        // Đảm bảo rằng phần tử video đã được render
+        const localVideo: HTMLVideoElement = document.querySelector('#localVideo');
+        
+        if (localVideo) {
+          // Gán stream vào video element của local participant
+          localVideo.srcObject = stream;
+          localVideo.play();
         } else {
           console.error("Không tìm thấy thẻ video để hiển thị camera!");
         }
-    
+  
         console.log("Camera đã bật thành công!");
       } catch (error) {
         console.error("Lỗi khi bật camera:", error);
       }
     }
+  
+    
     
 
     
