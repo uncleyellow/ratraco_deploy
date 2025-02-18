@@ -8,6 +8,8 @@ import { environment} from '../environment';
 })
 export class VideoCallService {
   private socket: any;
+  private isParticipantStreamRegistered = false; // Cờ kiểm tra sự kiện đã được đăng ký
+
   // Khai báo participants$ là BehaviorSubject thay vì Observable
   private participantsSubject = new BehaviorSubject<any[]>([]); // Đảm bảo bạn khởi tạo với mảng rỗng
   participants$ = this.participantsSubject.asObservable();
@@ -22,17 +24,41 @@ export class VideoCallService {
     });
   }
 
+  // joinRoom(roomId: string, participant: any): void {
+  //   this.socket.emit('joinRoom', roomId, participant);
+
+  //   // Lắng nghe stream của các participant từ server
+  //   this.socket.on('participantStream', (stream: MediaStream, participant: any) => {
+  //     // Cập nhật participant với stream của họ
+  //     participant.stream = stream;
+      
+  //     // Cập nhật danh sách participants
+  //     this.participantsSubject.next([...this.participantsSubject.getValue(), participant]);
+  //   });
+  // }
+  
+
   joinRoom(roomId: string, participant: any): void {
     this.socket.emit('joinRoom', roomId, participant);
 
-    // Lắng nghe stream của các participant từ server
-    this.socket.on('participantStream', (stream: MediaStream, participant: any) => {
-      // Cập nhật participant với stream của họ
-      participant.stream = stream;
-      
-      // Cập nhật danh sách participants
-      this.participantsSubject.next([...this.participantsSubject.getValue(), participant]);
-    });
+    // Kiểm tra nếu sự kiện đã được đăng ký
+    if (!this.isParticipantStreamRegistered) {
+      this.socket.on('participantStream', (stream: MediaStream, newParticipant: any) => {
+        // Cập nhật participant với stream của họ
+        newParticipant.stream = stream;
+
+        // Kiểm tra nếu participant đã có trong danh sách chưa, nếu chưa thì thêm
+        const currentParticipants = this.participantsSubject.getValue();
+        const index = currentParticipants.findIndex(p => p.id === newParticipant.id);
+        if (index === -1) {
+          // Thêm mới nếu participant chưa có trong danh sách
+          this.participantsSubject.next([...currentParticipants, newParticipant]);
+        }
+      });
+
+      // Đánh dấu sự kiện đã được đăng ký
+      this.isParticipantStreamRegistered = true;
+    }
   }
   
 

@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { VideoCallService } from 'app/shared/services/video-call.services';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-meeting-room',
@@ -18,20 +19,20 @@ export class MeetingRoomComponent implements OnInit {
     constructor(private videoCallService: VideoCallService) {}
   
     ngOnInit(): void {
-      // Khởi tạo kết nối WebRTC và lấy stream của camera/microphone
+      const uniqueId = uuidv4();
+      debugger
+      // Lấy quyền truy cập vào camera/microphone
       navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
         this.localStream = stream;
-      });
   
-      // Lắng nghe danh sách người tham gia
-      this.videoCallService.participants$.subscribe((participants) => {
-        this.participants = participants;
-      });
+        // Đảm bảo rằng người dùng tham gia vào phòng và gửi stream của mình
+        this.videoCallService.joinRoom('meetingRoom1', { id: uniqueId, name: 'You', stream });
   
-      // Tham gia phòng
-      const roomId = 'meetingRoom1'; // ID phòng
-
-      this.videoCallService.joinRoom(roomId, this.participants);
+        // Lắng nghe sự thay đổi trong danh sách participants từ service
+        this.videoCallService.participants$.subscribe((participants) => {
+          this.participants = participants;
+        });
+      });
     }
 
     ngAfterViewInit(): void {

@@ -43,6 +43,7 @@
     "socket.io-client": "^4.8.1",
     "sweetalert2": "^11.15.10",
     "tslib": "2.4.1",
+    "uuid": "^11.0.5",
     "xlsx": "^0.18.5",
     "zone.js": "0.12.0"
   },
