@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { VideoCallService } from 'app/shared/services/video-call.services';
 
 @Component({
@@ -14,8 +14,7 @@ export class MeetingRoomComponent implements OnInit {
     isRecording: boolean = false;
     localStream: MediaStream | null = null;
     peerConnections: any = {};
-    @ViewChild('localVideo') localVideo!: ElementRef;
-
+    @ViewChildren('localVideo') localVideos!: QueryList<ElementRef>;
     constructor(private videoCallService: VideoCallService) {}
   
     ngOnInit(): void {
@@ -35,15 +34,26 @@ export class MeetingRoomComponent implements OnInit {
       this.videoCallService.joinRoom(roomId, participant);
     }
 
-    ngAfterViewInit() {
-      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-        .then(stream => {
-          this.localVideo.nativeElement.srcObject = stream;
-          this.localVideo.nativeElement.play();
-        })
-        .catch(error => console.error("Lỗi camera:", error));
+    ngAfterViewInit(): void {
+      // Lưu ý: bạn phải đảm bảo ViewChildren đã được cập nhật sau khi component được render
+      this.localVideos.changes.subscribe(() => {
+        if (this.localVideos.length > 0) {
+          this.localVideos.toArray().forEach(videoElement => {
+            const video: HTMLVideoElement = videoElement.nativeElement;
+            navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+              .then((stream) => {
+                video.srcObject = stream;
+                video.play();
+              })
+              .catch((error) => {
+                console.error("Lỗi camera:", error);
+              });
+          });
+        }
+      });
     }
     
+
     toggleCamera(): void {
       if (this.localStream) {
         this.isCameraOn = !this.isCameraOn;
@@ -96,11 +106,13 @@ export class MeetingRoomComponent implements OnInit {
         // Lấy quyền truy cập camera
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     
-        // Gán stream vào thẻ video
-        const videoElement = document.getElementById('localVideo') as HTMLVideoElement;
-        if (videoElement) {
-          videoElement.srcObject = stream;
-          videoElement.play();
+        // Kiểm tra nếu có các video element và gán stream vào từng video
+        if (this.localVideos && this.localVideos.length > 0) {
+          this.localVideos.toArray().forEach(videoElement => {
+            const video: HTMLVideoElement = videoElement.nativeElement;
+            video.srcObject = stream;
+            video.play();
+          });
         } else {
           console.error("Không tìm thấy thẻ video để hiển thị camera!");
         }
@@ -110,5 +122,7 @@ export class MeetingRoomComponent implements OnInit {
         console.error("Lỗi khi bật camera:", error);
       }
     }
+    
+
     
 }
