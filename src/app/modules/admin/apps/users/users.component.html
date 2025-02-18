@@ -1,1 +1,13 @@
-khánh
+<div class="flex flex-col flex-auto min-w-0 bg-gray-100 p-6 sm:p-10 overflow-hidden">
+    <div class="flex flex-col items-start space-y-6">
+        <!-- Nút users -->
+        <button  
+          mat-flat-button  
+          color="primary"  
+          class="px-6 py-3 rounded-lg shadow-md hover:shadow-xl transition-all disabled:opacity-50 flex items-center gap-2"  
+          (click)="addNewUsers()">
+          <mat-icon class="w-6 h-6 text-white" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>  
+          <span class="font-semibold text-white text-lg">Thêm người dùng</span>  
+        </button>  
+    </div> 
+</div>
