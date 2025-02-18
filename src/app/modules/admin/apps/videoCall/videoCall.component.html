@@ -1,25 +1,42 @@
 <div class="meeting-room">
   <div class="video-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <!-- Video của người dùng hiện tại -->
+    <div class="video-container relative">
+      <video #myVideo [srcObject]="localStream" autoplay playsinline muted
+        class="w-full h-full object-cover rounded-md">
+      </video>
+      <div class="absolute bottom-2 left-2 bg-black bg-opacity-50 px-2 py-1 text-sm text-white rounded">
+        Bạn
+      </div>
+    </div>
+
+    <!-- Video của những người tham gia khác -->
     <div *ngFor="let participant of participants" class="video-container relative">
-      <video #localVideo [srcObject]="participant.stream" autoplay playsinline class="w-full h-full object-cover rounded-md"></video>
+      <video *ngIf="participant" [srcObject]="participant.stream" autoplay playsinline
+        class="w-full h-full object-cover rounded-md">
+      </video>
       <div class="absolute bottom-2 left-2 bg-black bg-opacity-50 px-2 py-1 text-sm text-white rounded">
         {{ participant.name }}
       </div>
     </div>
   </div>
 
-  <div class="controls flex justify-center space-x-4 mt-4">
-    <button class="button bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700" (click)="toggleCamera()">
+  <!-- <div class="controls flex justify-center space-x-4 mt-4">
+    <button class="button bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700" 
+      (click)="toggleCamera()">
       {{ isCameraOn ? 'Tắt' : 'Bật' }} Camera
     </button>
-    <button class="button bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700" (click)="toggleMic()">
+    <button class="button bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700" 
+      (click)="toggleMic()">
       {{ isMicOn ? 'Tắt' : 'Bật' }} Mic
     </button>
-    <button class="button bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-700" (click)="shareScreen()">
+    <button class="button bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-700" 
+      (click)="shareScreen()">
       {{ isScreenSharing ? 'Dừng' : 'Chia sẻ' }} Màn hình
     </button>
-    <button class="button bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700" (click)="startRecording()">
+    <button class="button bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700" 
+      (click)="startRecording()">
       {{ isRecording ? 'Dừng' : 'Ghi' }} Hình
     </button>
-  </div>
+  </div> -->
 </div>

@@ -8,122 +8,164 @@ import { v4 as uuidv4 } from 'uuid';
   styleUrls: ['./videoCall.component.scss']
 })
 export class MeetingRoomComponent implements OnInit {
-    participants: any[] = [];
-    isCameraOn: boolean = true;
-    isMicOn: boolean = true;
-    isScreenSharing: boolean = false;
-    isRecording: boolean = false;
-    localStream: MediaStream | null = null;
-    peerConnections: any = {};
-    @ViewChildren('localVideo') localVideos!: QueryList<ElementRef>;
-    constructor(private videoCallService: VideoCallService) {}
-  
-    ngOnInit(): void {
-      const uniqueId = uuidv4();
+  participants: any[] = [];
+  isCameraOn: boolean = true;
+  isMicOn: boolean = true;
+  isScreenSharing: boolean = false;
+  isRecording: boolean = false;
+  localStream: MediaStream | null = null;
+  peerConnections: { [key: string]: RTCPeerConnection } = {};
+  @ViewChild('myVideo') myVideo!: ElementRef<HTMLVideoElement>;
+  private roomId: string = 'meetingRoom1';
+  private userId: string;
+
+  constructor(private videoCallService: VideoCallService) {
+    this.userId = uuidv4();
+  }
+
+  async ngOnInit() {
+    try {
+      // Get local stream
+      this.localStream = await navigator.mediaDevices.getUserMedia({ 
+        video: true, 
+        audio: true 
+      });
+
+      // Join room
+      this.videoCallService.joinRoom(this.roomId, {
+        id: this.userId,
+        name: 'You',
+      });
+
+     // Listen for new participants
+     this.videoCallService.participants$.subscribe(participants => {
+      // Filter out current user from participants list
+      this.participants = participants.filter(p => p.id !== this.userId);
+      this.handleParticipantsUpdate(this.participants);
+    });
+
+      // Handle WebRTC signaling
+      this.setupSignalingHandlers();
+    } catch (err) {
+      console.error('Error accessing media devices:', err);
+    }
+  }
+
+
+  ngAfterViewInit() {
+    // Set local stream to video element
+    if (this.myVideo && this.localStream) {
+      this.myVideo.nativeElement.srcObject = this.localStream;
+      this.myVideo.nativeElement.muted = true; // Mute local video to prevent echo
+    }
+  }
+
+private handleParticipantsUpdate(participants: any[]) {
+    // Create peer connections for new participants
+    participants.forEach(participant => {
+      if (!this.peerConnections[participant.id]) {
+        this.createPeerConnection(participant.id);
+      }
+    });
+
+    // Clean up old peer connections
+    Object.keys(this.peerConnections).forEach(participantId => {
+      if (!participants.find(p => p.id === participantId)) {
+        this.peerConnections[participantId].close();
+        delete this.peerConnections[participantId];
+      }
+    });
+  }
+
+  private async createPeerConnection(participantId: string): Promise<RTCPeerConnection> {
+    const peerConnection = new RTCPeerConnection({
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' }
+      ]
+    });
+
+    // Add local stream
+    if (this.localStream) {
+      this.localStream.getTracks().forEach(track => {
+        if (this.localStream) {
+          peerConnection.addTrack(track, this.localStream);
+        }
+      });
+    }
+
+    // Handle ICE candidates
+    peerConnection.onicecandidate = (event) => {
+      if (event.candidate) {
+        this.videoCallService.sendIceCandidate({
+          target: participantId,
+          candidate: event.candidate
+        });
+      }
+    };
+
+    // Handle incoming tracks
+    peerConnection.ontrack = (event) => {
+      const participant = this.participants.find(p => p.id === participantId);
+      if (participant) {
+        participant.stream = event.streams[0];
+      }
+    };
+
+    this.peerConnections[participantId] = peerConnection;
+    
+    // Create and send offer
+    try {
+      const offer = await peerConnection.createOffer();
+      await peerConnection.setLocalDescription(offer);
+      this.videoCallService.sendOffer({
+        target: participantId,
+        sdp: offer
+      });
+    } catch (err) {
+      console.error('Error creating offer:', err);
+    }
+
+    return peerConnection;
+  }
+
+  private async setupSignalingHandlers() {
+    // Handle incoming offers
+    this.videoCallService.onOffer().subscribe(async ({ from, sdp }) => {
+      let peerConnection = this.peerConnections[from];
       
-      // Lấy quyền truy cập vào camera/microphone
-      navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
-        this.localStream = stream;
-  
-        // Đảm bảo rằng người dùng tham gia vào phòng và gửi stream của mình
-        this.videoCallService.joinRoom('meetingRoom1', { id: uniqueId, name: 'You', stream });
-  
-        // Lắng nghe sự thay đổi trong danh sách participants từ service
-        this.videoCallService.participants$.subscribe((participants) => {
-          this.participants = participants;
-        });
+      if (!peerConnection) {
+        peerConnection = await this.createPeerConnection(from);
+      }
+      
+      await peerConnection.setRemoteDescription(new RTCSessionDescription(sdp));
+      
+      // Create and send answer
+      const answer = await peerConnection.createAnswer();
+      await peerConnection.setLocalDescription(answer);
+      
+      this.videoCallService.sendAnswer({
+        target: from,
+        sdp: answer
       });
-    }
+    });
 
-    ngAfterViewInit(): void {
-      // Lưu ý: bạn phải đảm bảo ViewChildren đã được cập nhật sau khi component được render
-      this.localVideos.changes.subscribe(() => {
-        if (this.localVideos.length > 0) {
-          this.localVideos.toArray().forEach(videoElement => {
-            const video: HTMLVideoElement = videoElement.nativeElement;
-            navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-              .then((stream) => {
-                video.srcObject = stream;
-                video.play();
-              })
-              .catch((error) => {
-                console.error("Lỗi camera:", error);
-              });
-          });
-        }
-      });
-    }
-    
+    // Handle incoming answers
+    this.videoCallService.onAnswer().subscribe(async ({ from, sdp }) => {
+      const peerConnection = this.peerConnections[from];
+      if (peerConnection) {
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(sdp));
+      }
+    });
 
-    toggleCamera(): void {
-      if (this.localStream) {
-        this.isCameraOn = !this.isCameraOn;
-        this.localStream.getTracks().forEach(track => {
-          if (track.kind === 'video') {
-            track.enabled = this.isCameraOn;
-          }
-        });
+    // Handle incoming ICE candidates
+    this.videoCallService.onIceCandidate().subscribe(({ from, candidate }) => {
+      const peerConnection = this.peerConnections[from];
+      if (peerConnection) {
+        peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
       }
-    }
-  
-    toggleMic(): void {
-      if (this.localStream) {
-        this.isMicOn = !this.isMicOn;
-        this.localStream.getTracks().forEach(track => {
-          if (track.kind === 'audio') {
-            track.enabled = this.isMicOn;
-          }
-        });
-      }
-    }
-  
-    shareScreen(): void {
-      if (this.isScreenSharing) {
-        // Dừng chia sẻ màn hình
-        this.isScreenSharing = false;
-      } else {
-        // Chia sẻ màn hình
-        navigator.mediaDevices.getDisplayMedia({ video: true }).then((screenStream) => {
-          this.localStream?.getTracks().forEach(track => track.stop());  // Dừng video hiện tại
-          this.localStream = screenStream;
-          this.isScreenSharing = true;
-        });
-      }
-    }
-  
-    startRecording(): void {
-      if (this.isRecording) {
-        // Dừng ghi hình
-        this.isRecording = false;
-      } else {
-        // Bắt đầu ghi hình
-        this.isRecording = true;
-      }
-    }
+    });
+  }
 
-
-    async startCamera() {
-      try {
-        // Lấy quyền truy cập camera
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    
-        // Kiểm tra nếu có các video element và gán stream vào từng video
-        if (this.localVideos && this.localVideos.length > 0) {
-          this.localVideos.toArray().forEach(videoElement => {
-            const video: HTMLVideoElement = videoElement.nativeElement;
-            video.srcObject = stream;
-            video.play();
-          });
-        } else {
-          console.error("Không tìm thấy thẻ video để hiển thị camera!");
-        }
-    
-        console.log("Camera đã bật thành công!");
-      } catch (error) {
-        console.error("Lỗi khi bật camera:", error);
-      }
-    }
-    
-
-    
+  // Existing methods...
 }
