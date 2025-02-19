@@ -1,37 +1,83 @@
-<div class="meeting-room">
-  <div class="video-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <div *ngFor="let participant of participants" class="video-container relative">
-      <!-- Nếu đây là localVideo, sử dụng nó với id 'localVideo' -->
-      <video *ngIf="participant.isLocal; else remoteVideo"
-             id="localVideo" [attr.srcObject]="participant.stream"
-             autoplay playsinline class="w-full h-full object-cover rounded-md"></video>
+<!-- videoCall.component.html -->
+<div class="meeting-room w-full h-full bg-gray-100 p-4">
+  <!-- Video Grid -->
+  <div class="video-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+    <!-- Video Container cho mỗi participant -->
+    <div *ngFor="let participant of participants" 
+         class="video-container relative aspect-video bg-gray-800 rounded-lg overflow-hidden">
       
-      <!-- Nếu đây là remoteVideo, hiển thị video của người tham gia khác -->
-      <ng-template #remoteVideo>
-        <video [attr.srcObject]="participant.stream"
-               autoplay playsinline class="w-full h-full object-cover rounded-md"></video>
-      </ng-template>
+      <!-- Video Element -->
+      <video [attr.id]="participant.id"
+             [srcObject]="participant.stream"
+             [muted]="participant.isLocal"
+             autoplay
+             playsinline
+             class="w-full h-full object-cover">
+      </video>
       
-      <div class="absolute bottom-2 left-2 bg-black bg-opacity-50 px-2 py-1 text-sm text-white rounded">
-        {{ participant.name }}
+      <!-- Overlay thông tin -->
+      <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+        <div class="flex items-center justify-between">
+          <!-- Tên người tham gia -->
+          <span class="text-white text-sm font-medium">
+            {{ participant.name }} {{ participant.isLocal ? '(You)' : '' }}
+          </span>
+          
+          <!-- Indicators -->
+          <div class="flex space-x-2">
+            <!-- Mic status -->
+            <span class="text-white">
+              <i class="fas" [class.fa-microphone]="participant.isLocal ? isMicOn : true" 
+                          [class.fa-microphone-slash]="participant.isLocal && !isMicOn"></i>
+            </span>
+            <!-- Camera status -->
+            <span class="text-white">
+              <i class="fas" [class.fa-video]="participant.isLocal ? isCameraOn : true"
+                          [class.fa-video-slash]="participant.isLocal && !isCameraOn"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Loading overlay -->
+      <div *ngIf="!participant.stream" 
+           class="absolute inset-0 flex items-center justify-center bg-gray-900">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
       </div>
     </div>
   </div>
-  
-  
 
-  <div class="controls flex justify-center space-x-4 mt-4">
-    <button class="button bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700" (click)="toggleCamera()">
-      {{ isCameraOn ? 'Tắt' : 'Bật' }} Camera
-    </button>
-    <button class="button bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700" (click)="toggleMic()">
-      {{ isMicOn ? 'Tắt' : 'Bật' }} Mic
-    </button>
-    <button class="button bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-700" (click)="shareScreen()">
-      {{ isScreenSharing ? 'Dừng' : 'Chia sẻ' }} Màn hình
-    </button>
-    <button class="button bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700" (click)="startRecording()">
-      {{ isRecording ? 'Dừng' : 'Ghi' }} Hình
-    </button>
+  <!-- Control Bar -->
+  <div class="controls fixed bottom-0 left-0 right-0 bg-white shadow-lg p-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-center space-x-4">
+      <!-- Camera Toggle -->
+      <button (click)="toggleCamera()" 
+              class="control-button p-3 rounded-full"
+              [class.bg-red-500]="!isCameraOn"
+              [class.bg-blue-500]="isCameraOn">
+        <i class="fas" [class.fa-video]="isCameraOn" [class.fa-video-slash]="!isCameraOn"></i>
+      </button>
+
+      <!-- Microphone Toggle -->
+      <button (click)="toggleMic()"
+              class="control-button p-3 rounded-full"
+              [class.bg-red-500]="!isMicOn"
+              [class.bg-blue-500]="isMicOn">
+        <i class="fas" [class.fa-microphone]="isMicOn" [class.fa-microphone-slash]="!isMicOn"></i>
+      </button>
+
+      <!-- Screen Share -->
+      <button (click)="shareScreen()"
+              class="control-button p-3 rounded-full"
+              [class.bg-yellow-500]="isScreenSharing"
+              [class.bg-blue-500]="!isScreenSharing">
+        <i class="fas fa-desktop"></i>
+      </button>
+
+      <!-- Leave Meeting -->
+      <button class="control-button bg-red-500 p-3 rounded-full">
+        <i class="fas fa-phone-slash"></i>
+      </button>
+    </div>
   </div>
 </div>
