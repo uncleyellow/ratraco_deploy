@@ -25,63 +25,82 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   isRecording = false;
   private roomId = 'meetingRoom1';
   private userId = uuidv4();
-
+  saveStream
   constructor(private videoCallService: VideoCallService) {}
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit() {
+    this.initializeMediaStream();
+  }
+  
+  private async initializeMediaStream() {
     try {
-      // Khởi tạo local stream
-      this.localStream = await navigator.mediaDevices.getUserMedia({ 
-        video: true, 
-        audio: true 
+      this.localStream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true
       });
 
-      // Thêm local participant
       const localParticipant: Participant = {
         id: this.userId,
         name: 'You',
         stream: this.localStream,
         isLocal: true
       };
-      this.participants.push(localParticipant);
+      this.participants = [localParticipant];
 
-      // Tham gia phòng
-      this.videoCallService.joinRoom(this.roomId, {
-        id: this.userId,
-        name: 'You'
-      });
-      debugger
-      // Lắng nghe người tham gia mới
-      this.videoCallService.onNewParticipant().subscribe(async (newParticipant) => {
-        if (newParticipant.id !== this.userId) {
-          const peerConnection = await this.createPeerConnection(newParticipant.id);
-          
-          const participant: Participant = {
-            ...newParticipant,
-            stream: new MediaStream(),
-            isLocal: false,
-            peerConnection
-          };
-          
-          this.participants.push(participant);
-          
-          // Bắt đầu kết nối
-          if (this.localStream) {
-            this.videoCallService.startCall(participant, peerConnection, this.localStream);
-          }
-        }
-      });
-
-      // Lắng nghe khi có người rời phòng
-      this.videoCallService.onParticipantLeft().subscribe((participantId) => {
-        this.participants = this.participants.filter(p => p.id !== participantId);
-      });
-
+      // Sau khi có localStream mới join room
+      this.joinRoom();
+      this.setupSignalHandlers();
     } catch (error) {
       console.error('Error accessing media devices:', error);
     }
   }
-
+  private setupSignalHandlers() {
+    this.videoCallService.onSignalReceived().subscribe(async (data) => {
+      if (!data) return;
+  
+      const participant = this.participants.find(p => p.id === data.from);
+      
+      if (data.type === 'offer') {
+        if (!participant) {
+          // Tạo participant mới nếu chưa có
+          const peerConnection = await this.createPeerConnection(data.from);
+          const newParticipant: Participant = {
+            id: data.from,
+            name: 'Remote User',
+            stream: new MediaStream(),
+            isLocal: false,
+            peerConnection
+          };
+          this.participants.push(newParticipant);
+        }
+        
+        // Xử lý offer
+        await participant?.peerConnection?.setRemoteDescription(new RTCSessionDescription(data.data));
+        const answer = await participant?.peerConnection?.createAnswer();
+        await participant?.peerConnection?.setLocalDescription(answer);
+        
+        this.videoCallService.sendSignal({
+          type: 'answer',
+          data: answer,
+          to: data.from
+        });
+      }
+      
+      if (data.type === 'answer' && participant) {
+        await participant.peerConnection?.setRemoteDescription(new RTCSessionDescription(data.data));
+      }
+      
+      if (data.type === 'ice' && participant) {
+        await participant.peerConnection?.addIceCandidate(new RTCIceCandidate(data.data));
+      }
+    });
+  }
+  private joinRoom() {
+    this.videoCallService.joinRoom(this.roomId, {
+      id: this.userId,
+      name: 'You'
+    });
+  }
   private async createPeerConnection(participantId: string): Promise<RTCPeerConnection> {
     const peerConnection = new RTCPeerConnection({
       iceServers: [
@@ -89,8 +108,15 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
         { urls: 'stun:stun1.l.google.com:19302' }
       ]
     });
-
-    // Xử lý ICE candidate
+  
+    // Add local tracks to peer connection
+    if (this.localStream) {
+      this.localStream.getTracks().forEach(track => {
+        peerConnection.addTrack(track, this.localStream!);
+      });
+    }
+  
+    // Handle ICE candidates
     peerConnection.onicecandidate = (event) => {
       if (event.candidate) {
         this.videoCallService.sendSignal({
@@ -100,15 +126,16 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
         });
       }
     };
-
-    // Xử lý khi nhận được remote stream
+  
+    // Handle incoming tracks
     peerConnection.ontrack = (event) => {
       const participant = this.participants.find(p => p.id === participantId);
       if (participant) {
-        participant.stream.addTrack(event.track);
+        // Use the actual remote stream instead of creating new one
+        participant.stream = event.streams[0];
       }
     };
-
+  
     return peerConnection;
   }
 
@@ -163,30 +190,36 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   }
 
   private async updateLocalStream(): Promise<void> {
-    // Cập nhật stream cho local participant
+    if (!this.localStream) {
+      console.warn("⚠️ Local stream bị mất, thử lấy lại...");
+      this.localStream = await navigator.mediaDevices.getUserMedia({ 
+        video: true, 
+        audio: true 
+      });
+      console.log("✅ Lấy lại localStream thành công:", this.localStream);
+    }
+  
     const localParticipant = this.participants.find(p => p.isLocal);
-    if (localParticipant && this.localStream) {
+    if (localParticipant) {
       localParticipant.stream = this.localStream;
     }
-
-    // Cập nhật stream cho tất cả peer connections
+  
     for (const participant of this.participants) {
-      if (!participant.isLocal && participant.peerConnection && this.localStream) {
-        // Xóa tất cả tracks cũ
+      if (!participant.isLocal && participant.peerConnection) {
         const senders = participant.peerConnection.getSenders();
-        for (const sender of senders) {
-          await participant.peerConnection.removeTrack(sender);
-        }
-
-        // Thêm tracks mới
+        senders.forEach(sender => participant.peerConnection?.removeTrack(sender));
+  
         this.localStream.getTracks().forEach(track => {
           participant.peerConnection?.addTrack(track, this.localStream!);
         });
       }
     }
   }
+  
+  
 
   ngOnDestroy(): void {
+    debugger
     // Dọn dẹp streams và connections
     if (this.localStream) {
       this.localStream.getTracks().forEach(track => track.stop());
