@@ -3,11 +3,11 @@
   <!-- Video Grid -->
   <div class="video-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
     <!-- Video Container cho mỗi participant -->
-    <div *ngFor="let participant of participants" 
+    <div *ngFor="let participant of participants; trackBy: trackByParticipantId" 
          class="video-container relative aspect-video bg-gray-800 rounded-lg overflow-hidden">
       
       <!-- Video Element -->
-      <video [attr.id]="participant.id"
+      <video [attr.id]="'video-' + participant.id"
              [srcObject]="participant.stream"
              [muted]="participant.isLocal"
              autoplay
@@ -27,13 +27,17 @@
           <div class="flex space-x-2">
             <!-- Mic status -->
             <span class="text-white">
-              <i class="fas" [class.fa-microphone]="participant.isLocal ? isMicOn : true" 
-                          [class.fa-microphone-slash]="participant.isLocal && !isMicOn"></i>
+              <i class="fas" 
+                 [class.fa-microphone]="participant.isLocal ? isMicOn : true"
+                 [class.fa-microphone-slash]="participant.isLocal && !isMicOn"
+                 [class.text-red-500]="participant.isLocal && !isMicOn"></i>
             </span>
             <!-- Camera status -->
             <span class="text-white">
-              <i class="fas" [class.fa-video]="participant.isLocal ? isCameraOn : true"
-                          [class.fa-video-slash]="participant.isLocal && !isCameraOn"></i>
+              <i class="fas" 
+                 [class.fa-video]="participant.isLocal ? isCameraOn : true"
+                 [class.fa-video-slash]="participant.isLocal && !isCameraOn"
+                 [class.text-red-500]="participant.isLocal && !isCameraOn"></i>
             </span>
           </div>
         </div>
@@ -42,7 +46,19 @@
       <!-- Loading overlay -->
       <div *ngIf="!participant.stream" 
            class="absolute inset-0 flex items-center justify-center bg-gray-900">
-        <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+        <div class="flex flex-col items-center">
+          <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent mb-4"></div>
+          <p class="text-white text-sm">{{ participant.isLocal ? 'Initializing camera...' : 'Connecting...' }}</p>
+        </div>
+      </div>
+
+      <!-- No Camera Overlay -->
+      <div *ngIf="participant.stream && !isCameraOn && participant.isLocal" 
+           class="absolute inset-0 flex items-center justify-center bg-gray-900">
+        <div class="text-center">
+          <i class="fas fa-video-slash text-4xl text-white mb-2"></i>
+          <p class="text-white text-sm">Camera is off</p>
+        </div>
       </div>
     </div>
   </div>
@@ -51,32 +67,39 @@
   <div class="controls fixed bottom-0 left-0 right-0 bg-white shadow-lg p-4">
     <div class="max-w-7xl mx-auto flex items-center justify-center space-x-4">
       <!-- Camera Toggle -->
-      <button (click)="toggleCamera()" 
-              class="control-button p-3 rounded-full"
+      <!-- <button (click)="toggleCamera()" 
+              class="control-button p-3 rounded-full transition-colors duration-200"
               [class.bg-red-500]="!isCameraOn"
-              [class.bg-blue-500]="isCameraOn">
-        <i class="fas" [class.fa-video]="isCameraOn" [class.fa-video-slash]="!isCameraOn"></i>
-      </button>
+              [class.bg-blue-500]="isCameraOn"
+              [class.hover:bg-red-600]="!isCameraOn"
+              [class.hover:bg-blue-600]="isCameraOn">
+        <i class="fas text-white" [class.fa-video]="isCameraOn" [class.fa-video-slash]="!isCameraOn"></i>
+      </button> -->
 
       <!-- Microphone Toggle -->
-      <button (click)="toggleMic()"
-              class="control-button p-3 rounded-full"
+      <!-- <button (click)="toggleMic()"
+              class="control-button p-3 rounded-full transition-colors duration-200"
               [class.bg-red-500]="!isMicOn"
-              [class.bg-blue-500]="isMicOn">
-        <i class="fas" [class.fa-microphone]="isMicOn" [class.fa-microphone-slash]="!isMicOn"></i>
-      </button>
+              [class.bg-blue-500]="isMicOn"
+              [class.hover:bg-red-600]="!isMicOn"
+              [class.hover:bg-blue-600]="isMicOn">
+        <i class="fas text-white" [class.fa-microphone]="isMicOn" [class.fa-microphone-slash]="!isMicOn"></i>
+      </button> -->
 
       <!-- Screen Share -->
-      <button (click)="shareScreen()"
-              class="control-button p-3 rounded-full"
+      <!-- <button (click)="shareScreen()"
+              class="control-button p-3 rounded-full transition-colors duration-200"
               [class.bg-yellow-500]="isScreenSharing"
-              [class.bg-blue-500]="!isScreenSharing">
-        <i class="fas fa-desktop"></i>
-      </button>
+              [class.bg-blue-500]="!isScreenSharing"
+              [class.hover:bg-yellow-600]="isScreenSharing"
+              [class.hover:bg-blue-600]="!isScreenSharing">
+        <i class="fas fa-desktop text-white"></i>
+      </button> -->
 
       <!-- Leave Meeting -->
-      <button class="control-button bg-red-500 p-3 rounded-full">
-        <i class="fas fa-phone-slash"></i>
+      <button (click)="leaveMeeting()" 
+              class="control-button bg-red-500 hover:bg-red-600 p-3 rounded-full transition-colors duration-200">
+        <i class="fas fa-phone-slash text-white"></i>
       </button>
     </div>
   </div>
