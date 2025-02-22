@@ -196,6 +196,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       name: 'You'
     });
   }
+
   trackByParticipantId(index: number, participant: Participant): string {
     return participant.id;
   }
@@ -252,7 +253,6 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     }
   }
   
-  // Cập nhật phương thức shareScreen
   async shareScreen(): Promise<void> {
     try {
       if (this.isScreenSharing) {
@@ -288,7 +288,6 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     }
   }
   
-  // Cập nhật phương thức toggleCamera
   async toggleCamera(): Promise<void> {
     if (this.localStream) {
       const videoTracks = this.localStream.getVideoTracks();
@@ -299,7 +298,6 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     }
   }
   
-  // Cập nhật phương thức toggleMic
   async toggleMic(): Promise<void> {
     if (this.localStream) {
       const audioTracks = this.localStream.getAudioTracks();
@@ -309,7 +307,6 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       this.isMicOn = !this.isMicOn;
     }
   }
-  // ... rest of your existing methods (toggleCamera, toggleMic, etc.) ...
 
   ngOnDestroy() {
     // Cleanup streams and connections

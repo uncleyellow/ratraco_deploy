@@ -1,5 +1,4 @@
-<!-- videoCall.component.html -->
-<div class="meeting-room w-full h-full bg-gray-100 p-4">
+<div class="meeting-room w-full h-full bg-gray-900 p-4">
   <!-- Video Grid -->
   <div class="video-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
     <!-- Video Container cho mỗi participant -->
@@ -27,17 +26,13 @@
           <div class="flex space-x-2">
             <!-- Mic status -->
             <span class="text-white">
-              <i class="fas" 
-                 [class.fa-microphone]="participant.isLocal ? isMicOn : true"
-                 [class.fa-microphone-slash]="participant.isLocal && !isMicOn"
-                 [class.text-red-500]="participant.isLocal && !isMicOn"></i>
+              <mat-icon *ngIf="participant.isLocal ? isMicOn : true">mic</mat-icon>
+              <mat-icon *ngIf="participant.isLocal && !isMicOn" class="text-red-500">mic_off</mat-icon>
             </span>
             <!-- Camera status -->
             <span class="text-white">
-              <i class="fas" 
-                 [class.fa-video]="participant.isLocal ? isCameraOn : true"
-                 [class.fa-video-slash]="participant.isLocal && !isCameraOn"
-                 [class.text-red-500]="participant.isLocal && !isCameraOn"></i>
+              <mat-icon *ngIf="participant.isLocal ? isCameraOn : true">videocam</mat-icon>
+              <mat-icon *ngIf="participant.isLocal && !isCameraOn" class="text-red-500">videocam_off</mat-icon>
             </span>
           </div>
         </div>
@@ -47,7 +42,7 @@
       <div *ngIf="!participant.stream" 
            class="absolute inset-0 flex items-center justify-center bg-gray-900">
         <div class="flex flex-col items-center">
-          <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent mb-4"></div>
+          <mat-spinner diameter="48" strokeWidth="4" class="mb-4"></mat-spinner>
           <p class="text-white text-sm">{{ participant.isLocal ? 'Initializing camera...' : 'Connecting...' }}</p>
         </div>
       </div>
@@ -56,7 +51,7 @@
       <div *ngIf="participant.stream && !isCameraOn && participant.isLocal" 
            class="absolute inset-0 flex items-center justify-center bg-gray-900">
         <div class="text-center">
-          <i class="fas fa-video-slash text-4xl text-white mb-2"></i>
+          <mat-icon class="text-white text-4xl mb-2">videocam_off</mat-icon>
           <p class="text-white text-sm">Camera is off</p>
         </div>
       </div>
@@ -64,42 +59,42 @@
   </div>
 
   <!-- Control Bar -->
-  <div class="controls fixed bottom-0 left-0 right-0 bg-white shadow-lg p-4">
+  <div class="controls fixed bottom-0 left-0 right-0 bg-gray-800 shadow-lg p-4">
     <div class="max-w-7xl mx-auto flex items-center justify-center space-x-4">
       <!-- Camera Toggle -->
-      <!-- <button (click)="toggleCamera()" 
+      <button (click)="toggleCamera()" 
               class="control-button p-3 rounded-full transition-colors duration-200"
-              [class.bg-red-500]="!isCameraOn"
-              [class.bg-blue-500]="isCameraOn"
-              [class.hover:bg-red-600]="!isCameraOn"
-              [class.hover:bg-blue-600]="isCameraOn">
-        <i class="fas text-white" [class.fa-video]="isCameraOn" [class.fa-video-slash]="!isCameraOn"></i>
-      </button> -->
+              [ngClass]="{
+                'bg-gray-600 hover:bg-gray-700': isCameraOn,
+                'bg-red-500 hover:bg-red-600': !isCameraOn
+              }">
+        <mat-icon class="text-white">{{ isCameraOn ? 'videocam' : 'videocam_off' }}</mat-icon>
+      </button>
 
       <!-- Microphone Toggle -->
-      <!-- <button (click)="toggleMic()"
+      <button (click)="toggleMic()"
               class="control-button p-3 rounded-full transition-colors duration-200"
-              [class.bg-red-500]="!isMicOn"
-              [class.bg-blue-500]="isMicOn"
-              [class.hover:bg-red-600]="!isMicOn"
-              [class.hover:bg-blue-600]="isMicOn">
-        <i class="fas text-white" [class.fa-microphone]="isMicOn" [class.fa-microphone-slash]="!isMicOn"></i>
-      </button> -->
+              [ngClass]="{
+                'bg-gray-600 hover:bg-gray-700': isMicOn,
+                'bg-red-500 hover:bg-red-600': !isMicOn
+              }">
+        <mat-icon class="text-white">{{ isMicOn ? 'mic' : 'mic_off' }}</mat-icon>
+      </button>
 
       <!-- Screen Share -->
-      <!-- <button (click)="shareScreen()"
+      <button (click)="shareScreen()"
               class="control-button p-3 rounded-full transition-colors duration-200"
-              [class.bg-yellow-500]="isScreenSharing"
-              [class.bg-blue-500]="!isScreenSharing"
-              [class.hover:bg-yellow-600]="isScreenSharing"
-              [class.hover:bg-blue-600]="!isScreenSharing">
-        <i class="fas fa-desktop text-white"></i>
-      </button> -->
+              [ngClass]="{
+                'bg-gray-600 hover:bg-gray-700': !isScreenSharing,
+                'bg-yellow-500 hover:bg-yellow-600': isScreenSharing
+              }">
+        <mat-icon class="text-white">screen_share</mat-icon>
+      </button>
 
       <!-- Leave Meeting -->
       <button (click)="leaveMeeting()" 
               class="control-button bg-red-500 hover:bg-red-600 p-3 rounded-full transition-colors duration-200">
-        <i class="fas fa-phone-slash text-white"></i>
+        <mat-icon class="text-white">call_end</mat-icon>
       </button>
     </div>
   </div>
