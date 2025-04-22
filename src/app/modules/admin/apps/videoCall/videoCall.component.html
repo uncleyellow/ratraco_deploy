@@ -1,101 +1,12 @@
-<div class="meeting-room w-full h-full bg-gray-900 p-4">
-  <!-- Video Grid -->
-  <div class="video-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-    <!-- Video Container cho mỗi participant -->
-    <div *ngFor="let participant of participants; trackBy: trackByParticipantId" 
-         class="video-container relative aspect-video bg-gray-800 rounded-lg overflow-hidden">
-      
-      <!-- Video Element -->
-      <video [attr.id]="'video-' + participant.id"
-             [srcObject]="participant.stream"
-             [muted]="participant.isLocal"
-             autoplay
-             playsinline
-             class="w-full h-full object-cover">
-      </video>
-      
-      <!-- Overlay thông tin -->
-      <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-        <div class="flex items-center justify-between">
-          <!-- Tên người tham gia -->
-          <span class="text-white text-sm font-medium">
-            {{ participant.name }} {{ participant.isLocal ? '(You)' : '' }}
-          </span>
-          
-          <!-- Indicators -->
-          <div class="flex space-x-2">
-            <!-- Mic status -->
-            <span class="text-white">
-              <mat-icon *ngIf="participant.isLocal ? isMicOn : true">mic</mat-icon>
-              <mat-icon *ngIf="participant.isLocal && !isMicOn" class="text-red-500">mic_off</mat-icon>
-            </span>
-            <!-- Camera status -->
-            <span class="text-white">
-              <mat-icon *ngIf="participant.isLocal ? isCameraOn : true">videocam</mat-icon>
-              <mat-icon *ngIf="participant.isLocal && !isCameraOn" class="text-red-500">videocam_off</mat-icon>
-            </span>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Loading overlay -->
-      <div *ngIf="!participant.stream" 
-           class="absolute inset-0 flex items-center justify-center bg-gray-900">
-        <div class="flex flex-col items-center">
-          <mat-spinner diameter="48" strokeWidth="4" class="mb-4"></mat-spinner>
-          <p class="text-white text-sm">{{ participant.isLocal ? 'Initializing camera...' : 'Connecting...' }}</p>
-        </div>
-      </div>
+<!DOCTYPE html>
+<html lang="en">
 
-      <!-- No Camera Overlay -->
-      <div *ngIf="participant.stream && !isCameraOn && participant.isLocal" 
-           class="absolute inset-0 flex items-center justify-center bg-gray-900">
-        <div class="text-center">
-          <mat-icon class="text-white text-4xl mb-2">videocam_off</mat-icon>
-          <p class="text-white text-sm">Camera is off</p>
-        </div>
-      </div>
-    </div>
-  </div>
+<head>
+    <meta property="zalo-platform-site-verification" content="GD2GAC3bD3OBpgCv-iuW8ddDjtoLks4WDpSq" />
+</head>
 
-  <!-- Control Bar -->
-  <div class="controls fixed bottom-0 left-0 right-0 bg-gray-800 shadow-lg p-4">
-    <div class="max-w-7xl mx-auto flex items-center justify-center space-x-4">
-      <!-- Camera Toggle -->
-      <button (click)="toggleCamera()" 
-              class="control-button p-3 rounded-full transition-colors duration-200"
-              [ngClass]="{
-                'bg-gray-600 hover:bg-gray-700': isCameraOn,
-                'bg-red-500 hover:bg-red-600': !isCameraOn
-              }">
-        <mat-icon class="text-white">{{ isCameraOn ? 'videocam' : 'videocam_off' }}</mat-icon>
-      </button>
+<body>
+There Is No Limit To What You Can Accomplish Using Zalo!
+</body>
 
-      <!-- Microphone Toggle -->
-      <button (click)="toggleMic()"
-              class="control-button p-3 rounded-full transition-colors duration-200"
-              [ngClass]="{
-                'bg-gray-600 hover:bg-gray-700': isMicOn,
-                'bg-red-500 hover:bg-red-600': !isMicOn
-              }">
-        <mat-icon class="text-white">{{ isMicOn ? 'mic' : 'mic_off' }}</mat-icon>
-      </button>
-
-      <!-- Screen Share -->
-      <button (click)="shareScreen()"
-              class="control-button p-3 rounded-full transition-colors duration-200"
-              [ngClass]="{
-                'bg-gray-600 hover:bg-gray-700': !isScreenSharing,
-                'bg-yellow-500 hover:bg-yellow-600': isScreenSharing
-              }">
-        <mat-icon class="text-white">screen_share</mat-icon>
-      </button>
-
-      <!-- Leave Meeting -->
-      <button (click)="leaveMeeting()" 
-              class="control-button bg-red-500 hover:bg-red-600 p-3 rounded-full transition-colors duration-200">
-        <mat-icon class="text-white">call_end</mat-icon>
-      </button>
-    </div>
-  </div>
-</div>
+</html>
